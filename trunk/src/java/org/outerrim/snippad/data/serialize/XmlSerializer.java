@@ -52,9 +52,9 @@ import org.outerrim.snippad.data.WikiWord;
  */
 public class XmlSerializer 
 implements WikiSerializer {
-    static private final String VERSION = "0.1";
+    static private final String VERSION = "0.2";
     static private final String ROOT = "snippad";
-    static private final String SYSTEMID = "file:///home/darkjedi/projects/snippad/doc/snippad.dtd";
+    static private final String SYSTEMID = "http://snippad.berlios.de/snippad.dtd";
     
     static private final Log log = LogFactory.getLog( XmlSerializer.class );
     
