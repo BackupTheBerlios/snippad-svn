@@ -50,7 +50,7 @@ public class ImageUtil {
             URL newdoc = registry.getClass().getResource( "/icons/newfile_wiz.gif" );
             registry.put( "new",
                           ImageDescriptor.createFromURL( newdoc ) );
-            URL open = registry.getClass().getResource( "/icons/restore_log.gif" );
+            URL open = registry.getClass().getResource( "/icons/open.gif" );
             registry.put( "open",
                           ImageDescriptor.createFromURL( open ) );
             URL print = registry.getClass().getResource( "/icons/print_edit.gif" );
@@ -65,6 +65,18 @@ public class ImageUtil {
             URL renameword = registry.getClass().getResource( "/icons/refresh.gif" );
             registry.put( "renameword",
                           ImageDescriptor.createFromURL( renameword ) );
+            URL up = registry.getClass().getResource( "/icons/up.gif" );
+            registry.put( "up",
+                          ImageDescriptor.createFromURL( up ) );
+            URL down = registry.getClass().getResource( "/icons/down.gif" );
+            registry.put( "down",
+                          ImageDescriptor.createFromURL( down ) );
+            URL back = registry.getClass().getResource( "/icons/back.gif" );
+            registry.put( "back",
+                          ImageDescriptor.createFromURL( back ) );
+            URL forward = registry.getClass().getResource( "/icons/forward.gif" );
+            registry.put( "forward",
+                          ImageDescriptor.createFromURL( forward ) );
         }
         
         return registry;

@@ -51,7 +51,7 @@ public class NewWikiWordAction extends Action {
     public NewWikiWordAction( SnipPad w ) {
         window = w;
         setText( "New &Word@Ctrl+W" );
-        setToolTipText( "Create a new node attached to the selected node" );
+        setToolTipText( "Create a new word" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "newword" ) );
     }
     

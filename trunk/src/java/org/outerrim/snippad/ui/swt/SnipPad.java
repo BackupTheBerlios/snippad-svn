@@ -45,8 +45,6 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.LocationEvent;
 import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -65,6 +63,10 @@ import org.outerrim.snippad.service.config.ConfigurationException;
 import org.outerrim.snippad.ui.swt.actions.AboutAction;
 import org.outerrim.snippad.ui.swt.actions.DeleteWikiWordAction;
 import org.outerrim.snippad.ui.swt.actions.ExitAction;
+import org.outerrim.snippad.ui.swt.actions.MoveWordBackAction;
+import org.outerrim.snippad.ui.swt.actions.MoveWordDownAction;
+import org.outerrim.snippad.ui.swt.actions.MoveWordForwardAction;
+import org.outerrim.snippad.ui.swt.actions.MoveWordUpAction;
 import org.outerrim.snippad.ui.swt.actions.NewWikiAction;
 import org.outerrim.snippad.ui.swt.actions.NewWikiWordAction;
 import org.outerrim.snippad.ui.swt.actions.OpenAction;
@@ -74,9 +76,6 @@ import org.outerrim.snippad.ui.swt.actions.RenameWordAction;
 import org.outerrim.snippad.ui.swt.actions.SaveAsWikiAction;
 import org.outerrim.snippad.ui.swt.actions.SaveWikiAction;
 import org.outerrim.snippad.ui.swt.actions.ShowEditorAction;
-import org.outerrim.snippad.ui.swt.dnd.WikiTransfer;
-import org.outerrim.snippad.ui.swt.dnd.WikiWordDragListener;
-import org.outerrim.snippad.ui.swt.dnd.WikiWordTreeDropAdapter;
 import org.radeox.api.engine.context.RenderContext;
 import org.radeox.engine.context.BaseRenderContext;
 
@@ -108,6 +107,10 @@ public class SnipPad extends ApplicationWindow {
     private NewWikiWordAction actionNewWikiWord;
     private DeleteWikiWordAction actionDeleteWikiWord;
     private RenameWordAction actionRenameWord;
+	private MoveWordUpAction actionMoveUp;
+	private MoveWordDownAction actionMoveDown;
+	private MoveWordBackAction actionMoveBack;
+	private MoveWordForwardAction actionMoveForward;
     private PreferencesAction actionPreferences;
     private AboutAction actionAbout;
     
@@ -174,7 +177,6 @@ public class SnipPad extends ApplicationWindow {
         tree.setInput( rootWiki );
         wikiEngine.setDocument( rootWiki );
         
-        actionSaveWiki.setEnabled( true );
         actionSaveAsWiki.setEnabled( true );
         actionPrint.setEnabled( true );
         actionNewWikiWord.setEnabled( true );
@@ -183,6 +185,7 @@ public class SnipPad extends ApplicationWindow {
     public boolean isModified() { return modified; }
     public void setModified( boolean mod ) { 
         modified = mod;
+		actionSaveWiki.setEnabled( modified );
         getShell().setText( getTitle( loadedFilename ) + (mod ? "*" : "") );
     }
     
@@ -240,6 +243,10 @@ public class SnipPad extends ApplicationWindow {
         actionNewWikiWord = new NewWikiWordAction( this );
         actionDeleteWikiWord = new DeleteWikiWordAction( this );
         actionRenameWord = new RenameWordAction( this );
+		actionMoveUp = new MoveWordUpAction( this );
+		actionMoveDown = new MoveWordDownAction( this );
+		actionMoveBack = new MoveWordBackAction( this );
+		actionMoveForward = new MoveWordForwardAction( this );
         actionPreferences = new PreferencesAction( this );
         actionAbout = new AboutAction( this );
         
@@ -249,6 +256,10 @@ public class SnipPad extends ApplicationWindow {
         actionNewWikiWord.setEnabled( false );
         actionDeleteWikiWord.setEnabled( false );
         actionRenameWord.setEnabled( false );
+		actionMoveUp.setEnabled( false );
+		actionMoveDown.setEnabled( false );
+		actionMoveBack.setEnabled( false );
+		actionMoveForward.setEnabled( false );
         
         addStatusLine();
         addMenuBar();
@@ -299,10 +310,10 @@ public class SnipPad extends ApplicationWindow {
         editorSash.setWeights( new int[] { 60, 40 } );
         
         // Setup drag and drop
-        int ops = DND.DROP_MOVE;
-        Transfer[] transfers = new Transfer[] { WikiTransfer.getInstance() };
-        tree.addDragSupport( ops, transfers, new WikiWordDragListener( tree ) );
-        tree.addDropSupport( ops, transfers, new WikiWordTreeDropAdapter( tree ) );
+//        int ops = DND.DROP_MOVE;
+//        Transfer[] transfers = new Transfer[] { WikiTransfer.getInstance() };
+//        tree.addDragSupport( ops, transfers, new WikiWordDragListener( tree ) );
+//        tree.addDropSupport( ops, transfers, new WikiWordTreeDropAdapter( tree ) );
         
         return sashForm;
     }
@@ -341,6 +352,11 @@ public class SnipPad extends ApplicationWindow {
         editMenu.add( actionRenameWord );
         editMenu.add( actionDeleteWikiWord );
         editMenu.add( new Separator() );
+		editMenu.add( actionMoveUp );
+		editMenu.add( actionMoveDown );
+		editMenu.add( actionMoveBack );
+		editMenu.add( actionMoveForward );
+        editMenu.add( new Separator() );
         editMenu.add( actionEdit );
         editMenu.add( actionPreferences );
         
@@ -363,7 +379,12 @@ public class SnipPad extends ApplicationWindow {
 		toolBar.add( new Separator() );
         toolBar.add( actionNewWikiWord );
 		toolBar.add( actionDeleteWikiWord );
-
+		toolBar.add( new Separator() );
+		toolBar.add( actionMoveUp );
+		toolBar.add( actionMoveDown );
+		toolBar.add( actionMoveBack );
+		toolBar.add( actionMoveForward );
+		
         return toolBar;
     }
     
@@ -428,10 +449,18 @@ public class SnipPad extends ApplicationWindow {
             clear();
             actionDeleteWikiWord.setEnabled( false );
             actionRenameWord.setEnabled( false );
+			actionMoveUp.setEnabled( false );
+			actionMoveDown.setEnabled( false );
+			actionMoveBack.setEnabled( false );
+			actionMoveForward.setEnabled( false );
             return; 
         } else {
             actionDeleteWikiWord.setEnabled( true );
             actionRenameWord.setEnabled( true );
+			actionMoveUp.setEnabled( true );
+			actionMoveDown.setEnabled( true );
+			actionMoveBack.setEnabled( true );
+			actionMoveForward.setEnabled( true );
         }
         
         if( selectedWikiWord.getHtmlText() == null ) {
