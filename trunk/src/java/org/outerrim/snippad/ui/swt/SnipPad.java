@@ -43,12 +43,15 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.outerrim.snippad.SnipPadConstants;
 import org.outerrim.snippad.data.WikiWord;
@@ -84,6 +87,7 @@ public class SnipPad extends ApplicationWindow {
     private String loadedFilename;
     private WikiWord rootWiki;
     private WikiWord selectedWikiWord;
+    private MenuItem popupNewWord;
     private boolean modified;
     
     // Actions
@@ -158,6 +162,7 @@ public class SnipPad extends ApplicationWindow {
         actionSaveWiki.setEnabled( true );
         actionSaveAsWiki.setEnabled( true );
         actionNewWikiWord.setEnabled( true );
+        popupNewWord.setEnabled( true );
     }
     
     public boolean isModified() { return modified; }
@@ -198,6 +203,7 @@ public class SnipPad extends ApplicationWindow {
         
         return super.close();
     }
+    
     /**
      * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
      */
@@ -240,7 +246,9 @@ public class SnipPad extends ApplicationWindow {
                 handleTreeSelectionChanged( event );
             }
         });
-
+        
+        tree.getTree().setMenu( createTreePopupMenu() );
+        
         editorSash = new SashForm( sashForm, SWT.VERTICAL );
 
         browser = new Browser( editorSash, SWT.BORDER );
@@ -269,7 +277,6 @@ public class SnipPad extends ApplicationWindow {
      */
     protected void initializeBounds() {
         getShell().setSize( config.getInitialSize() );
-//        getShell().setLocation( config.getInitialLocation() );
     }
     
     /**
@@ -316,6 +323,25 @@ public class SnipPad extends ApplicationWindow {
         toolBar.add( actionNewWikiWord );
 
         return toolBar;
+    }
+    
+    /**
+     * Creates the popup menu for the wiki tree.
+     * @return Menu containing the entries
+     */
+    private Menu createTreePopupMenu() {
+        Menu popupMenu = new Menu( getShell(), SWT.POP_UP );
+        
+        popupNewWord = new MenuItem( popupMenu, SWT.PUSH );
+        popupNewWord.setText( "New Word" );
+        popupNewWord.addSelectionListener( new SelectionAdapter() {
+            public void widgetSelected( SelectionEvent se ) {
+                actionNewWikiWord.run();
+            }
+        });
+        
+        popupNewWord.setEnabled( false );
+        return popupMenu;
     }
     
     private String getTitle( String f ) {
