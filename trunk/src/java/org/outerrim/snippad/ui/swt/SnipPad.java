@@ -43,11 +43,7 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
-import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -272,60 +268,7 @@ public class SnipPad extends ApplicationWindow {
         editorSash.setWeights( new int[] { 60, 40 } );
         
         // Setup drag and drop
-        Transfer[] transfers = new Transfer[] { WikiTransfer.getInstance() };
-        DragSourceListener sourceListener = new DragSourceListener() {
-            public void dragStart( DragSourceEvent event ) {
-                
-            }
-            
-            public void dragSetData( DragSourceEvent event ) {
-                if( WikiTransfer.getInstance().isSupportedType( event.dataType ) ) {
-                    event.data = ((IStructuredSelection)tree.getSelection()).getFirstElement();
-                }
-            }
-            
-            public void dragFinished( DragSourceEvent event ) {
-                if( event.detail == DND.DROP_MOVE ) {
-                    WikiWord word = ((WikiWord)((IStructuredSelection)tree.getSelection()).getFirstElement());
-                    word.getParent().deleteWikiWord( word );
-                }
-            }
-        };
-        DropTargetListener dropListener = new DropTargetListener() {
-            public void dragOver( DropTargetEvent event ) {
-                event.feedback = DND.FEEDBACK_SELECT | 
-                        DND.FEEDBACK_SCROLL | 
-                        DND.FEEDBACK_INSERT_AFTER | 
-                        DND.FEEDBACK_INSERT_BEFORE | 
-                        DND.FEEDBACK_EXPAND;
-                if( WikiTransfer.getInstance().isSupportedType( event.currentDataType ) ) {
-                    Object o = WikiTransfer.getInstance().nativeToJava( event.currentDataType );
-                    if( o != null ) {
-                        log.debug( "o is valid : " + o.getClass() );
-                    }
-                }
-            }
-            
-            public void dragOperationChanged( DropTargetEvent event ) {
-            }
-            
-            public void dragEnter( DropTargetEvent event ) {
-            }
-            
-            public void dropAccept( DropTargetEvent event ) {
-            }
-            
-            public void dragLeave( DropTargetEvent event ) {
-            }
-            
-            public void drop( DropTargetEvent event ) {
-                if( WikiTransfer.getInstance().isSupportedType( event.currentDataType ) ) {
-                    
-                }
-            }
-        };
-        tree.addDragSupport( DND.DROP_MOVE, transfers, sourceListener );
-        tree.addDropSupport( DND.DROP_MOVE, transfers, dropListener );
+        Transfer[] transfers = new Transfer[] { TextTransfer.getInstance() };
         
         return sashForm;
     }
