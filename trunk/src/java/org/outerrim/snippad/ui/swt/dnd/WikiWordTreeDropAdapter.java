@@ -36,7 +36,6 @@ public class WikiWordTreeDropAdapter extends ViewerDropAdapter {
      */
     public boolean performDrop( Object obj ) {
         WikiWord target = (WikiWord)getCurrentTarget();
-        log.debug( "Target is : " + target.getName() );
         if( target != null ) {
             int loc = getCurrentLocation();
             if( loc == LOCATION_BEFORE || loc == LOCATION_AFTER ) {
@@ -48,6 +47,8 @@ public class WikiWordTreeDropAdapter extends ViewerDropAdapter {
         if( target == null ) {
             target = (WikiWord)getViewer().getInput();
         }
+
+        log.debug( "Target is : " + target.getName() );
         
         WikiWord[] toDrop = (WikiWord[])obj;
         TreeViewer viewer = (TreeViewer)getViewer();
@@ -59,16 +60,16 @@ public class WikiWordTreeDropAdapter extends ViewerDropAdapter {
         }
         
         for( int i = 0; i < toDrop.length; ++i ) {
-            toDrop[i].setParent( target );
+			log.debug( "Processing word : " + toDrop[i].getName() );
             log.debug( "Adding new word (" + toDrop[i].getName() + ") to word : " + target.getName() );
             int index = determineIndex();
             if( index == -1 ) {
+				log.debug( "Adding word" );
                 target.addWikiWord( toDrop[i] );                
             } else {
                 log.debug( "Adding word at index : " + index );
                 target.addWikiWord( toDrop[i], index );
             }
-//            viewer.add( target, toDrop[i] );
             viewer.reveal( toDrop[i] );
         }
         
@@ -83,18 +84,22 @@ public class WikiWordTreeDropAdapter extends ViewerDropAdapter {
     }
 
     private int determineIndex() {
-        int index = -1;
         TreeViewer tree = (TreeViewer)getViewer();
         WikiWordContentProvider content = (WikiWordContentProvider)tree.getContentProvider();
         WikiWord target = (WikiWord)getCurrentTarget();
         List children = Arrays.asList( content.getChildren( target.getParent() ) );
         int targetLocation = children.indexOf( target );
-        int location = getCurrentLocation();
-        if( location == LOCATION_BEFORE ) {
-            index = targetLocation;
-        } else if( location == LOCATION_AFTER ) {
-            index = ++targetLocation;
-        }
-        return index;
+		log.debug( "Starting target location is : " + targetLocation );
+//        int location = getCurrentLocation();
+//        if( location == LOCATION_AFTER ) {
+//            ++targetLocation;
+//        }
+//
+//        int thisLocation = children.indexOf( content );
+//        if( thisLocation < targetLocation ) {
+//        	--targetLocation;
+//        }
+
+        return targetLocation;
     }
 }

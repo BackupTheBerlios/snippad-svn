@@ -40,10 +40,12 @@ public class WikiWordDragListener extends DragSourceAdapter {
         
         if( event.detail == DND.DROP_MOVE ) {
             IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-            for( Iterator it = selection.iterator(); it.hasNext(); ) {
-                ((WikiWord)it.next()).setParent( null );
-            }
-            viewer.refresh();
+//			for( Iterator it = selection.iterator(); it.hasNext(); ) {
+//				WikiWord word = (WikiWord)it.next();
+//                word.getParent().deleteWikiWord( word );
+//            }
+
+			viewer.refresh();
         }
     }
     
@@ -53,6 +55,11 @@ public class WikiWordDragListener extends DragSourceAdapter {
         if( WikiTransfer.getInstance().isSupportedType( event.dataType ) ) {
             event.data = words;
         }
+		
+		for( Iterator it = selection.iterator(); it.hasNext(); ) {
+			WikiWord word = (WikiWord)it.next();
+            word.getParent().deleteWikiWord( word );
+        }		
     }
     
     public void dragStart( DragSourceEvent event ) {
