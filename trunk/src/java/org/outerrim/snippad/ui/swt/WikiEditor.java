@@ -22,7 +22,11 @@
  */
 package org.outerrim.snippad.ui.swt;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -41,6 +45,9 @@ public class WikiEditor extends Composite {
     private Text editor;
     private Button btnRevert;
     private Button btnSave;
+    private boolean modified;
+    
+    static private final Log log = LogFactory.getLog( WikiEditor.class );
     
     /** 
      * Pre-modified text, used for the Revert button
@@ -65,8 +72,10 @@ public class WikiEditor extends Composite {
     }
 
     public void setText( String text ) {
+        log.debug( "setText()" );
         editor.setText( text );
         this.text = text;
+        modified = false;
     }
     
     public String getText() {
@@ -76,6 +85,8 @@ public class WikiEditor extends Composite {
     public void addSaveListener( SelectionListener listener ) {
         btnSave.addSelectionListener( listener );
     }
+    
+    public boolean isModified() { return modified; }
     
     private void handleRevert() {
         editor.setText( text );
@@ -96,6 +107,16 @@ public class WikiEditor extends Composite {
                                             true,
                                             true );
         editor.setLayoutData( editorData );
+        editor.addKeyListener( new KeyListener() {
+            public void keyReleased( KeyEvent event ) {
+                modified = true;
+                if( !window.isModified() ) {
+                    window.setModified( true );
+                }
+            }
+            
+            public void keyPressed( KeyEvent event ) {}
+        });
         
         Composite buttonBar = new Composite( this, SWT.NONE );
         buttonBar.setLayout( new RowLayout() );
@@ -127,6 +148,7 @@ public class WikiEditor extends Composite {
     }
     
     private void handleSave() {
+        modified = false;
         text = editor.getText();
         window.setModified( true );
     }

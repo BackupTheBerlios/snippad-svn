@@ -398,8 +398,27 @@ public class SnipPad extends ApplicationWindow {
      */
     private void handleTreeSelectionChanged( SelectionChangedEvent event ) {
         IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+        WikiWord newWord = (WikiWord)selection.getFirstElement();
+
+        // If the new and old are the same, do nothing
+        if( selectedWikiWord == newWord ) {
+            return;
+        }
         
-        selectedWikiWord = (WikiWord)selection.getFirstElement();
+        // Check if the last word's text is still modified, and warn if it is
+        if( text.isModified() ) {
+	        MessageBox message = new MessageBox( getShell(), 
+	                SWT.ICON_QUESTION | SWT.YES | SWT.NO );
+	        message.setMessage( "Wiki text not saved, lose edits?" );
+	        int confirm = message.open();
+	        if( confirm == SWT.NO ) { 
+                IStructuredSelection select = new StructuredSelection( selectedWikiWord );
+                tree.setSelection( select, true );
+                return;
+	        }
+        }
+                
+        selectedWikiWord = newWord;
         if( selectedWikiWord == null ) {	// No selection, clear everything
             clear();
             actionDeleteWikiWord.setEnabled( false );
