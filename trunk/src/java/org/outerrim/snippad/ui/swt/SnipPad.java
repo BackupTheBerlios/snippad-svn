@@ -64,6 +64,7 @@ import org.outerrim.snippad.ui.swt.actions.NewWikiAction;
 import org.outerrim.snippad.ui.swt.actions.NewWikiWordAction;
 import org.outerrim.snippad.ui.swt.actions.OpenAction;
 import org.outerrim.snippad.ui.swt.actions.PreferencesAction;
+import org.outerrim.snippad.ui.swt.actions.RenameWordAction;
 import org.outerrim.snippad.ui.swt.actions.SaveAsWikiAction;
 import org.outerrim.snippad.ui.swt.actions.SaveWikiAction;
 import org.outerrim.snippad.ui.swt.actions.ShowEditorAction;
@@ -101,6 +102,7 @@ public class SnipPad extends ApplicationWindow {
     private ShowEditorAction actionEdit;
     private NewWikiWordAction actionNewWikiWord;
     private DeleteWikiWordAction actionDeleteWikiWord;
+    private RenameWordAction actionRenameWord;
     private PreferencesAction actionPreferences;
     private AboutAction actionAbout;
     
@@ -220,6 +222,7 @@ public class SnipPad extends ApplicationWindow {
         actionEdit = new ShowEditorAction( this );
         actionNewWikiWord = new NewWikiWordAction( this );
         actionDeleteWikiWord = new DeleteWikiWordAction( this );
+        actionRenameWord = new RenameWordAction( this );
         actionPreferences = new PreferencesAction( this );
         actionAbout = new AboutAction( this );
         
@@ -227,6 +230,7 @@ public class SnipPad extends ApplicationWindow {
         actionSaveAsWiki.setEnabled( false );
         actionNewWikiWord.setEnabled( false );
         actionDeleteWikiWord.setEnabled( false );
+        actionRenameWord.setEnabled( false );
         
         addStatusLine();
         addMenuBar();
@@ -311,6 +315,7 @@ public class SnipPad extends ApplicationWindow {
         fileMenu.add( actionExit );
         
         editMenu.add( actionNewWikiWord );
+        editMenu.add( actionRenameWord );
         editMenu.add( actionDeleteWikiWord );
         editMenu.add( new Separator() );
         editMenu.add( actionEdit );
@@ -343,6 +348,7 @@ public class SnipPad extends ApplicationWindow {
         
         MenuManager popupMenu = new MenuManager();
         popupMenu.add( actionNewWikiWord );
+        popupMenu.add( actionRenameWord );
         popupMenu.add( actionDeleteWikiWord );
 
         return popupMenu.createContextMenu( tree.getTree() );
@@ -375,9 +381,11 @@ public class SnipPad extends ApplicationWindow {
         if( selectedWikiWord == null ) {	// No selection, clear everything
             clear();
             actionDeleteWikiWord.setEnabled( false );
+            actionRenameWord.setEnabled( false );
             return; 
         } else {
             actionDeleteWikiWord.setEnabled( true );
+            actionRenameWord.setEnabled( true );
         }
         
         if( selectedWikiWord.getHtmlText() == null ) {
