@@ -36,7 +36,7 @@ public class ExitAction extends Action {
     
     public ExitAction( SnipPad w ) {
         window = w;
-        setText( "E&xit@Ctrl+X" );
+        setText( "E&xit" );
         setToolTipText( "Exit SnipPad" );
     }
 

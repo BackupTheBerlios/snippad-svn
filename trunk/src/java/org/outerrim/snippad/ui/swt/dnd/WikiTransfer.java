@@ -47,6 +47,14 @@ public class WikiTransfer extends ByteArrayTransfer {
         }
     }
     
+    private String bytesToString( byte[] bytes ) {
+        StringBuffer buffer = new StringBuffer();
+        for( int i = 0; i < bytes.length; ++i ) {
+            buffer.append( bytes[i] );
+        }
+        return buffer.toString();
+    }
+    
     protected Object nativeToJava( TransferData data ) {
         byte[] bytes = (byte[])super.nativeToJava( data );
         log.debug( "nativeToJava() : bytes[] is : " + bytes );
@@ -116,6 +124,7 @@ public class WikiTransfer extends ByteArrayTransfer {
         
         try {
             // write out number of markers
+            log.debug( "Writing " + words.length + " words to byte array" );
             out.writeInt( words.length );
             
             for( int i = 0; i < words.length; ++i ) {
@@ -151,6 +160,7 @@ public class WikiTransfer extends ByteArrayTransfer {
         String title = dataIn.readUTF();
         String text = dataIn.readUTF();
         int n = dataIn.readInt();
+        log.debug( title + " has " + n + " children" );
         WikiWord newParent = new WikiWord( title, text );
         newParent.setParent( parent );
         
@@ -181,6 +191,7 @@ public class WikiTransfer extends ByteArrayTransfer {
         dataOut.writeUTF( word.getName() );
         dataOut.writeUTF( word.getWikiText() );
         List children = word.getWikiWords();
+        log.debug( "Word has " + children.size() + " children" );
         dataOut.writeInt( children.size() );
         for( int i = 0, size = children.size(); i < size; ++i ) {
             writeWikiWord( (WikiWord)children.get(i), dataOut );

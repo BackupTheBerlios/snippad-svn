@@ -26,6 +26,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Object that stores a WikiWord. Heart of the snippad document structure, as 
  * everything is a wikiword, even the document itself.
@@ -37,6 +40,8 @@ public class WikiWord {
     private String wikiText;
     private WikiWord parent;
     private List wikiWords = new ArrayList();
+    
+    static private final Log log = LogFactory.getLog( WikiWord.class );
     
     /** 
      * Used to store a cached version of the rendered wikiText.
@@ -71,14 +76,17 @@ public class WikiWord {
     public void setParent( WikiWord word ) {
         if( word != null && word.equals( parent ) ) { return; }
         
-        if( word != null ) {
-            word.addWikiWord( this );
-        }
-
         if( parent != null ) {
+            log.debug( "Deleting " + this.getName() + " from word : " + parent.getName() );
             parent.deleteWikiWord( this );
         }
+
         parent = word;
+        if( parent != null ) {
+            log.debug( "Adding " + this.getName() + " to word : " + parent.getName() );
+            parent.addWikiWord( this );
+        }
+
     }
 
     /**

@@ -57,6 +57,5 @@ public class WikiWordDragListener extends DragSourceAdapter {
     
     public void dragStart( DragSourceEvent event ) {
         event.doit = !viewer.getSelection().isEmpty();
-        log.debug( "event.doit : " + event.doit );
     }
 }
