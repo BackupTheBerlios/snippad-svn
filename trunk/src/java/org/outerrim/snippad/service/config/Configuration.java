@@ -30,7 +30,7 @@ import org.eclipse.swt.graphics.Point;
  */
 public class Configuration {
     /** Location of the CSS file to use when rendering the HTML */
-    private String cssLocation = "file:///home/darkjedi/projects/snippad/snippad.css";
+    private String cssLocation = "http://snippad.berlios.de/snippad.css";
     
     /** Show the Wiki Editor by default on startup */
     private boolean showEditor = true;
