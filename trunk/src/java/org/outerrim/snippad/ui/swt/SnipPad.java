@@ -398,6 +398,11 @@ public class SnipPad extends ApplicationWindow {
         popupMenu.add( actionNewWikiWord );
         popupMenu.add( actionRenameWord );
         popupMenu.add( actionDeleteWikiWord );
+		popupMenu.add( new Separator() );
+		popupMenu.add( actionMoveUp );
+		popupMenu.add( actionMoveDown );
+		popupMenu.add( actionMoveBack );
+		popupMenu.add( actionMoveForward );
 
         return popupMenu.createContextMenu( tree.getTree() );
     }
