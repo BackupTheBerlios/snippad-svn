@@ -8,6 +8,8 @@ package org.outerrim.snippad.ui.swt.dnd;
 
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.dnd.DND;
@@ -20,6 +22,8 @@ import org.outerrim.snippad.data.WikiWord;
  */
 public class WikiWordDragListener extends DragSourceAdapter {
     private StructuredViewer viewer;
+    
+    static private final Log log = LogFactory.getLog( WikiWordDragListener.class );
     
     /**
      * 
@@ -53,5 +57,6 @@ public class WikiWordDragListener extends DragSourceAdapter {
     
     public void dragStart( DragSourceEvent event ) {
         event.doit = !viewer.getSelection().isEmpty();
+        log.debug( "event.doit : " + event.doit );
     }
 }
