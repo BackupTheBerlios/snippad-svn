@@ -64,6 +64,7 @@ import org.outerrim.snippad.ui.swt.actions.NewWikiAction;
 import org.outerrim.snippad.ui.swt.actions.NewWikiWordAction;
 import org.outerrim.snippad.ui.swt.actions.OpenAction;
 import org.outerrim.snippad.ui.swt.actions.PreferencesAction;
+import org.outerrim.snippad.ui.swt.actions.PrintAction;
 import org.outerrim.snippad.ui.swt.actions.RenameWordAction;
 import org.outerrim.snippad.ui.swt.actions.SaveAsWikiAction;
 import org.outerrim.snippad.ui.swt.actions.SaveWikiAction;
@@ -98,6 +99,7 @@ public class SnipPad extends ApplicationWindow {
     private OpenAction actionOpen;
     private SaveWikiAction actionSaveWiki;
     private SaveAsWikiAction actionSaveAsWiki;
+    private PrintAction actionPrint;
     private ExitAction actionExit;
     private ShowEditorAction actionEdit;
     private NewWikiWordAction actionNewWikiWord;
@@ -168,6 +170,7 @@ public class SnipPad extends ApplicationWindow {
         
         actionSaveWiki.setEnabled( true );
         actionSaveAsWiki.setEnabled( true );
+        actionPrint.setEnabled( true );
         actionNewWikiWord.setEnabled( true );
     }
     
@@ -218,6 +221,7 @@ public class SnipPad extends ApplicationWindow {
         actionOpen = new OpenAction( this );
         actionSaveAsWiki = new SaveAsWikiAction( this );
         actionSaveWiki = new SaveWikiAction( this, actionSaveAsWiki );
+        actionPrint = new PrintAction();
         actionExit = new ExitAction( this );
         actionEdit = new ShowEditorAction( this );
         actionNewWikiWord = new NewWikiWordAction( this );
@@ -228,6 +232,7 @@ public class SnipPad extends ApplicationWindow {
         
         actionSaveWiki.setEnabled( false );
         actionSaveAsWiki.setEnabled( false );
+        actionPrint.setEnabled( false );
         actionNewWikiWord.setEnabled( false );
         actionDeleteWikiWord.setEnabled( false );
         actionRenameWord.setEnabled( false );
@@ -260,6 +265,7 @@ public class SnipPad extends ApplicationWindow {
         editorSash = new SashForm( sashForm, SWT.VERTICAL );
 
         browser = new Browser( editorSash, SWT.BORDER );
+        actionPrint.setBrowser( browser );
         text = new WikiEditor( editorSash, this );
         text.setEnabled( false );
         text.addSaveListener( new SelectionListener() {
@@ -311,6 +317,8 @@ public class SnipPad extends ApplicationWindow {
         fileMenu.add( actionOpen );
         fileMenu.add( actionSaveWiki );
         fileMenu.add( actionSaveAsWiki );
+        fileMenu.add( new Separator() );
+        fileMenu.add( actionPrint );
         fileMenu.add( new Separator() );
         fileMenu.add( actionExit );
         

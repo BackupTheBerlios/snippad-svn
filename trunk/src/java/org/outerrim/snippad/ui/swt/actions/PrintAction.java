@@ -23,25 +23,27 @@
 package org.outerrim.snippad.ui.swt.actions;
 
 import org.eclipse.jface.action.Action;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.eclipse.swt.browser.Browser;
 
 /**
  * @author darkjedi
  */
 public class PrintAction extends Action {
-    private SnipPad window;
+    private Browser browser;
     
-    public PrintAction( SnipPad w ) {
-        window = w;
+    public PrintAction() {
         setText( "&Print@Ctrl+P" );
         setToolTipText( "Print current Snip" );
+    }
+    
+    public void setBrowser( Browser b ) {
+        browser = b;
     }
     
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        // TODO Auto-generated method stub
-        super.run();
+        browser.setUrl( "javascript:print()" );
     }
 }
