@@ -67,8 +67,8 @@ public class OpenAction extends Action {
         }
 
         FileDialog dialog = new FileDialog( window.getShell(), SWT.OPEN );
-        dialog.setFilterNames( new String[] { "XML Files", "All Files (*,*)" } );
-        dialog.setFilterExtensions( new String[] { "*.xml", "*,*" } );
+        dialog.setFilterNames( new String[] { "Snippad Files", "All Files (*,*)" } );
+        dialog.setFilterExtensions( new String[] { "*.snip", "*,*" } );
         dialog.setFilterPath( SnipPad.getConfiguration().getDefaultSaveAsLocation() );
         String filename = dialog.open();
         if( filename == null ) { return; }

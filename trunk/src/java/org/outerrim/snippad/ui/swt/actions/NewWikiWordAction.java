@@ -60,7 +60,7 @@ public class NewWikiWordAction extends Action {
     public void run() {
         NewWordDialog input = new NewWordDialog();
         int selected = input.open();
-        if( selected == SWT.OK ) {
+        if( selected == NewWordDialog.OK ) {
             window.setModified( true );
         }
     }
@@ -93,7 +93,6 @@ public class NewWikiWordAction extends Action {
             }
             
             selectedWiki.addWikiWord( word );
-            word.setParent( selectedWiki );
             window.refreshTree();
             close();
         }

@@ -68,14 +68,17 @@ public class WikiWord {
     public void setName( String name ) { this.name = name; }
     public void setWikiText( String text ) { this.wikiText = text; }
     
-    public void setParent( WikiWord parent ) {
-        if( this.parent != null ) {
-            this.parent.deleteWikiWord( this );
+    public void setParent( WikiWord word ) {
+        if( word != null && word.equals( parent ) ) { return; }
+        
+        if( word != null ) {
+            word.addWikiWord( this );
         }
-        this.parent = parent;
+
         if( parent != null ) {
-            parent.addWikiWord( this );
+            parent.deleteWikiWord( this );
         }
+        parent = word;
     }
 
     /**
@@ -101,6 +104,16 @@ public class WikiWord {
     public void addWikiWord( WikiWord word ) {
         if( !wikiWords.contains( word ) ) {
             wikiWords.add( word );
+            word.setParent( this );
+        }
+    }
+    
+    public void addWikiWord( WikiWord word, int location ) {
+        if( wikiWords.contains( word ) ) {
+            wikiWords.add( location, word );
+        } else {
+            wikiWords.add( location, word );
+            word.setParent( this );
         }
     }
     
@@ -112,5 +125,20 @@ public class WikiWord {
         wikiWords.remove( word );
     }
     
+    public boolean hasParent( WikiWord word ) {
+        if( parent == null ) { return false; }
+        
+        return parent.equals( word ) || parent.hasParent( word );
+    }
+    
     public String toString() { return name; }
+    
+    public boolean equals( Object obj ) {
+        if( !(obj instanceof WikiWord ) ) { return false; }
+        if( this == obj ) { return true; }
+        WikiWord word = (WikiWord)obj;
+        return (name.equals( word.name ) &&
+                wikiText.equals( word.wikiText ) &&
+                wikiWords.equals( word.wikiWords ));
+    }
 }

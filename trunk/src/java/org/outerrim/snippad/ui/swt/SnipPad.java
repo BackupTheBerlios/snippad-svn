@@ -43,7 +43,7 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -67,6 +67,9 @@ import org.outerrim.snippad.ui.swt.actions.PreferencesAction;
 import org.outerrim.snippad.ui.swt.actions.SaveAsWikiAction;
 import org.outerrim.snippad.ui.swt.actions.SaveWikiAction;
 import org.outerrim.snippad.ui.swt.actions.ShowEditorAction;
+import org.outerrim.snippad.ui.swt.dnd.WikiTransfer;
+import org.outerrim.snippad.ui.swt.dnd.WikiWordDragListener;
+import org.outerrim.snippad.ui.swt.dnd.WikiWordTreeDropAdapter;
 import org.radeox.api.engine.RenderEngine;
 import org.radeox.api.engine.context.RenderContext;
 import org.radeox.engine.BaseRenderEngine;
@@ -268,7 +271,10 @@ public class SnipPad extends ApplicationWindow {
         editorSash.setWeights( new int[] { 60, 40 } );
         
         // Setup drag and drop
-        Transfer[] transfers = new Transfer[] { TextTransfer.getInstance() };
+        int ops = DND.DROP_MOVE;
+        Transfer[] transfers = new Transfer[] { WikiTransfer.getInstance() };
+        tree.addDragSupport( ops, transfers, new WikiWordDragListener( tree ) );
+        tree.addDropSupport( ops, transfers, new WikiWordTreeDropAdapter( tree ) );
         
         return sashForm;
     }
