@@ -96,11 +96,14 @@ public class WikiWord {
      * @param cssLocation Location of the CSS file for display
      */
     public void setHtmlText( String text, String cssLocation ) {
-        String html = "<html>\n" +
-                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssLocation + "\" />\n" +
-                      "<body>\n" + 
-                      text + 
-                      "\n</body></html>\n";
+        String html = 
+			"<html>\n" +
+			"<head>\n" +
+            "<link rel=\"stylesheet\" type=\"text/css\" href=\"" + cssLocation + "\" />\n" +
+            "</head>\n" +
+            "<body>\n" + 
+            text + 
+            "\n</body></html>\n";
         this.htmlText = html; 
     }
     
