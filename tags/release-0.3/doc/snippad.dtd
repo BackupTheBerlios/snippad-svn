@@ -1,8 +1,0 @@
-<!ELEMENT snippad (text,wiki+)>
-<!ATTLIST snippad version CDATA #REQUIRED>
-<!ATTLIST snippad name CDATA #REQUIRED>
-
-<!ELEMENT wiki (text,wiki*)>
-<!ATTLIST wiki name CDATA #REQUIRED>
-
-<!ELEMENT text (#PCDATA)>
