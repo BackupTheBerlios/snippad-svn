@@ -102,6 +102,7 @@ public class WikiWord {
         if( !wikiWords.contains( word ) ) {
             wikiWords.add( word );
         }
+        word.setParent( this );
     }
     
     /**
@@ -112,5 +113,20 @@ public class WikiWord {
         wikiWords.remove( word );
     }
     
+    public boolean hasParent( WikiWord word ) {
+        if( parent == null ) { return false; }
+        
+        return parent.equals( word ) || parent.hasParent( word );
+    }
+    
     public String toString() { return name; }
+    
+    public boolean equals( Object obj ) {
+        if( !(obj instanceof WikiWord ) ) { return false; }
+        if( this == obj ) { return true; }
+        WikiWord word = (WikiWord)obj;
+        return (name.equals( word.name ) &&
+                wikiText.equals( word.wikiText ) &&
+                wikiWords.equals( word.wikiWords ));
+    }
 }
