@@ -105,7 +105,7 @@ public class NewWikiWordAction extends Action {
          */
         protected Control createDialogArea( Composite parent ) {
             setTitle( "New Wiki Word" );
-            setMessage( "Testing" );
+            setMessage( "Enter information for new word" );
             Composite panel = new Composite( parent, SWT.NONE ); //(Composite)super.createDialogArea( parent );
             GridLayout layout = new GridLayout( 3, false );
             panel.setLayout( layout );
