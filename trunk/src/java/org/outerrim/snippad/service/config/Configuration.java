@@ -23,7 +23,11 @@
 package org.outerrim.snippad.service.config;
 
 import java.io.IOException;
+import java.util.Iterator;
 
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceStore;
 import org.eclipse.swt.graphics.Point;
@@ -40,9 +44,16 @@ public class Configuration {
     static public final String INITIAL_SIZE_Y = "initial_size_y";
     static public final String SAVE_AS_LOCATION = "save_as_location";
     
+	static public final String RECENT_DOCUMENT = "recentDocument";
+	static public final String NUMBER_RECENT = "numberRecent";
+	
     static private PreferenceStore store = new PreferenceStore( 
             SnipPadConstants.PREFERENCE_FILENAME );
 
+	private CircularFifoBuffer recentDocuments;
+
+    static private final Log log = LogFactory.getLog( Configuration.class );
+	
     public Configuration() {
         init();
     }
@@ -67,19 +78,37 @@ public class Configuration {
     
     public IPreferenceStore getStore() { return store; }
     
+	public Iterator getRecentDocumentsIterator() { return recentDocuments.iterator(); }
+	public int getRecentNumber() { return store.getInt( NUMBER_RECENT ); }
     public String getCssLocation() { return store.getString( CSS_LOCATION ); }
     public String getDefaultSaveAsLocation() { return store.getString( SAVE_AS_LOCATION ); }
     public boolean showEditor() { return store.getBoolean( SHOW_EDITOR ); }
-    public Point getInitialSize() { return new Point( store.getInt( 
-            INITIAL_SIZE_X ), store.getInt( INITIAL_SIZE_Y ) ); }
+    public Point getInitialSize() { return new Point( 
+			store.getInt( INITIAL_SIZE_X ), 
+			store.getInt( INITIAL_SIZE_Y ) ); }
     
-    public void setCssLocation( String css ) { store.setValue( CSS_LOCATION, css ); }
+	public void addRecentDocument( String file ) {
+		int storeSize = store.getInt( NUMBER_RECENT );
+		if( storeSize != recentDocuments.maxSize() ) {
+			log.debug( "Preference Store Recent Documents size has changed, updating data structure" );
+			resizeRecentDocuments( storeSize );
+		}
+		
+		if( recentDocuments.contains( file ) ) {
+			log.debug( "Document is already in the list, removing before adding" );
+			recentDocuments.remove( file );
+		}
+		recentDocuments.add( file );
+	}
+	
     public void setDefaultSaveAsLocation( String loc ) { store.setValue( SAVE_AS_LOCATION, loc ); }
-    public void setShowEditor( boolean show ) { store.setValue( SHOW_EDITOR, show ); }
     public void setInitialSize( int x, int y ) { 
-        store.setValue( INITIAL_SIZE_X, x );
-        store.setValue( INITIAL_SIZE_Y, y );
+        	store.setValue( INITIAL_SIZE_X, x );
+			store.setValue( INITIAL_SIZE_Y, y );
     }
+
+//    public void setCssLocation( String css ) { store.setValue( CSS_LOCATION, css ); }
+//    public void setShowEditor( boolean show ) { store.setValue( SHOW_EDITOR, show ); }
 
     private void init() {
         store.setDefault( CSS_LOCATION, "http://snippad.berlios.de/snippad.css" );
@@ -87,5 +116,22 @@ public class Configuration {
         store.setDefault( INITIAL_SIZE_X, 1024 );
         store.setDefault( INITIAL_SIZE_Y, 600 );
         store.setDefault( SAVE_AS_LOCATION, System.getProperty( "user.home" ) );
+		store.setDefault( NUMBER_RECENT, 4 );
+		
+		recentDocuments = new CircularFifoBuffer( store.getInt( NUMBER_RECENT ) );
     }
+	
+	/**
+	 * Resizes the Recent Documents list
+	 * @param newSize the new size of the list
+	 */
+	private void resizeRecentDocuments( int newSize ) {
+		CircularFifoBuffer newBuffer = new CircularFifoBuffer( newSize );
+		
+		for( Iterator it = recentDocuments.iterator(); it.hasNext(); ) {
+			newBuffer.add( it.next() );
+		}
+		
+		recentDocuments = newBuffer;
+	}
 }

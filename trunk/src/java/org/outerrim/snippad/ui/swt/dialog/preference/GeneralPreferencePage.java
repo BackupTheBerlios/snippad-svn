@@ -28,6 +28,7 @@ import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.outerrim.snippad.service.config.Configuration;
@@ -60,7 +61,17 @@ public class GeneralPreferencePage extends FieldEditorPreferencePage {
      * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
      */
     protected void createFieldEditors() {
-        addField( new StringFieldEditor( Configuration.CSS_LOCATION, "CSS Location", getFieldEditorParent() ) );
-        addField( new BooleanFieldEditor( Configuration.SHOW_EDITOR, "Show Editor By Default", getFieldEditorParent() ) );
+        addField( new StringFieldEditor( 
+				Configuration.CSS_LOCATION, 
+				"CSS Location", 
+				getFieldEditorParent() ) );
+        addField( new BooleanFieldEditor( 
+				Configuration.SHOW_EDITOR, 
+				"Show Editor By Default", 
+				getFieldEditorParent() ) );
+		addField( new IntegerFieldEditor( 
+				Configuration.NUMBER_RECENT, 
+				"# of Recent Documents to Track", 
+				getFieldEditorParent() ) );
     }
 }

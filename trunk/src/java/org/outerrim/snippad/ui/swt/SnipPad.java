@@ -26,10 +26,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
@@ -72,6 +77,7 @@ import org.outerrim.snippad.ui.swt.actions.NewWikiWordAction;
 import org.outerrim.snippad.ui.swt.actions.OpenAction;
 import org.outerrim.snippad.ui.swt.actions.PreferencesAction;
 import org.outerrim.snippad.ui.swt.actions.PrintAction;
+import org.outerrim.snippad.ui.swt.actions.RecentDocumentAction;
 import org.outerrim.snippad.ui.swt.actions.RenameWordAction;
 import org.outerrim.snippad.ui.swt.actions.SaveAsWikiAction;
 import org.outerrim.snippad.ui.swt.actions.SaveWikiAction;
@@ -113,7 +119,10 @@ public class SnipPad extends ApplicationWindow {
 	private MoveWordForwardAction actionMoveForward;
     private PreferencesAction actionPreferences;
     private AboutAction actionAbout;
-    
+
+	private MenuManager fileMenu;
+	private List recentList = new ArrayList();
+	
     static private Configuration config = new Configuration();
     
     static private String TITLE = "SnipPad v" + SnipPadConstants.VERSION;
@@ -170,6 +179,8 @@ public class SnipPad extends ApplicationWindow {
      * @param filename Filename of this document
      */
     public void setWiki( WikiWord wiki, String filename ) {
+		updateRecentDocuments( filename );
+		
         setLoadedFilename( filename );
         clear();
         rootWiki = wiki;
@@ -226,6 +237,7 @@ public class SnipPad extends ApplicationWindow {
             logError( "Cannot save configuration", E );
         }
         
+		browser.dispose();
         return super.close();
     }
     
@@ -331,7 +343,7 @@ public class SnipPad extends ApplicationWindow {
     protected MenuManager createMenuManager() {
         MenuManager mainMenu = new MenuManager( "" );
         
-        MenuManager fileMenu = new MenuManager( "&File" );
+        fileMenu = new MenuManager( "&File" );
         MenuManager editMenu = new MenuManager( "&Edit" );
         MenuManager helpMenu = new MenuManager( "&Help" );
         
@@ -344,7 +356,12 @@ public class SnipPad extends ApplicationWindow {
         fileMenu.add( actionSaveWiki );
         fileMenu.add( actionSaveAsWiki );
         fileMenu.add( new Separator() );
-        fileMenu.add( actionPrint );
+        fileMenu.add( actionPrint );		
+        fileMenu.add( new Separator() {
+			public String getId() { return "RECENT"; }
+        });
+		// Recent Documents list
+		reloadRecentDocuments();
         fileMenu.add( new Separator() );
         fileMenu.add( actionExit );
         
@@ -411,6 +428,28 @@ public class SnipPad extends ApplicationWindow {
         return TITLE + " : " + (f == null ? "(New File)" : f);
     }
     
+	private void updateRecentDocuments( String file ) {
+		for( Iterator it = recentList.iterator(); it.hasNext(); ) {
+			IContributionItem item = fileMenu.remove( ((IAction)it.next()).getId() );
+			log.debug( "Removed item : " + item );
+			if( item != null ) {
+				item.update();
+			}
+		}
+		recentList.clear();
+		
+		getConfiguration().addRecentDocument( file );
+		reloadRecentDocuments();
+	}
+	
+	private void reloadRecentDocuments() {
+		for( Iterator it = getConfiguration().getRecentDocumentsIterator(); it.hasNext(); ) {
+			IAction action = new RecentDocumentAction( this, (String)it.next() );
+			fileMenu.insertAfter( "RECENT", action );
+			recentList.add( action );
+		}
+	}
+	
     /**
      * Resets the application to a clean state.
      */
