@@ -24,31 +24,24 @@ package org.outerrim.snippad.ui.swt.dialog.preference;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceNode;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.outerrim.snippad.service.config.Configuration;
 import org.outerrim.snippad.ui.swt.SnipPad;
-import org.outerrim.snippad.ui.swt.dialog.DialogUtils;
 
 /**
  * @author darkjedi
  */
-public class GeneralPreferencePage extends PreferencePage {
+public class GeneralPreferencePage extends FieldEditorPreferencePage {
 
     static private final Log log = LogFactory.getLog( GeneralPreferencePage.class );
     
     public GeneralPreferencePage() {
-        super( "General" );
+        super( "General", FLAT );
     }
 
     public IPreferenceNode getNode() {
@@ -64,38 +57,10 @@ public class GeneralPreferencePage extends PreferencePage {
     }
     
     /**
-     * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+     * @see org.eclipse.jface.preference.FieldEditorPreferencePage#createFieldEditors()
      */
-    protected Control createContents( Composite parent ) {
-        Composite composite = new Composite( parent, SWT.NULL );
-        GridLayout layout = new GridLayout();
-        layout.numColumns = 1;
-        composite.setLayout( layout );
-        GridData data = new GridData();
-        data.horizontalAlignment = SWT.FILL;
-        data.verticalAlignment = SWT.FILL;
-        composite.setLayoutData( data );
-        
-        Composite css = new Composite( composite, SWT.NULL );
-        GridLayout cssLayout = new GridLayout();
-        cssLayout.numColumns = 2;
-        css.setLayout( cssLayout );
-        css.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        
-        Label cssLabel = DialogUtils.createLabel( css, "CSS File" );
-        Text cssText = DialogUtils.createTextControl( css );
-
-        Button showButton = DialogUtils.createCheckButton( 
-                composite, 
-                "Show Editor on Startup" );
-
-        return composite;
-    }
-    
-    /**
-     * @see org.eclipse.jface.preference.PreferencePage#doComputeSize()
-     */
-    protected Point doComputeSize() {
-        return new Point( 300, 300 );
+    protected void createFieldEditors() {
+        addField( new StringFieldEditor( Configuration.CSS_LOCATION, "CSS Location", getFieldEditorParent() ) );
+        addField( new BooleanFieldEditor( Configuration.SHOW_EDITOR, "Show Editor By Default", getFieldEditorParent() ) );
     }
 }
