@@ -34,9 +34,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
+import org.outerrim.snippad.service.WikiWordUtils;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -84,6 +86,15 @@ public class NewWikiWordAction extends Action {
          */
         protected void okPressed() {
             String name = text.getText();
+			
+			// Check if a wikiword with this name already exists
+			if( WikiWordUtils.wordExists( window.getRootWiki(), name ) != null ) {
+    	        MessageBox message = new MessageBox( getShell(), SWT.ICON_ERROR | SWT.OK );
+    	        message.setMessage( "Word with this name already exists!" );
+				message.open();
+				return;
+			}
+			
             WikiWord word = new WikiWord();
             word.setName( name );
             word.setWikiText( "" );
