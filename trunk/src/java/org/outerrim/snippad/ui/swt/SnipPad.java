@@ -360,8 +360,9 @@ public class SnipPad extends ApplicationWindow {
         toolBar.add( actionSaveWiki );
 		toolBar.add( new Separator() );
 		toolBar.add( actionPrint );
-//        toolBar.add( actionEdit );
-//        toolBar.add( actionNewWikiWord );
+		toolBar.add( new Separator() );
+        toolBar.add( actionNewWikiWord );
+		toolBar.add( actionDeleteWikiWord );
 
         return toolBar;
     }
