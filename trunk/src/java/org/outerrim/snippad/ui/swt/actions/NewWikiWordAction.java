@@ -33,9 +33,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.ui.swt.SnipPad;
@@ -61,8 +59,10 @@ public class NewWikiWordAction extends Action {
      */
     public void run() {
         NewWordDialog input = new NewWordDialog();
-        input.open();
-        window.setModified( true );
+        int selected = input.open();
+        if( selected == SWT.OK ) {
+            window.setModified( true );
+        }
     }
     
     /**
@@ -71,7 +71,8 @@ public class NewWikiWordAction extends Action {
      */
     private class NewWordDialog extends TitleAreaDialog {
         private Text text; 
-        private boolean fSelected = true;
+        private Button selected;
+        private WikiWord selectedWiki = null;
         
         public NewWordDialog() {
             super( window.getShell() );
@@ -81,21 +82,18 @@ public class NewWikiWordAction extends Action {
          * @see org.eclipse.jface.dialogs.Dialog#okPressed()
          */
         protected void okPressed() {
-            WikiWord selected;
             String name = text.getText();
             WikiWord word = new WikiWord();
             word.setName( name );
             word.setWikiText( "" );
             
-            selected = window.getSelectedWiki();
-                
-            if( !fSelected || selected == null ) {
+            if( !selected.getSelection() ) {
                 log.info( "Adding new word to root" );
-                selected = window.getRootWiki();
+                selectedWiki = window.getRootWiki();
             }
             
-            selected.addWikiWord( word );
-            word.setParent( selected );
+            selectedWiki.addWikiWord( word );
+            word.setParent( selectedWiki );
             window.refreshTree();
             close();
         }
@@ -119,20 +117,23 @@ public class NewWikiWordAction extends Action {
             
             Label wordLabel = new Label( panel, SWT.RIGHT );
             wordLabel.setText( "Attach to:" );
-            final Button selected = new Button( panel, SWT.RADIO );
+            
+            selectedWiki = window.getSelectedWiki();                        
+            selected = new Button( panel, SWT.RADIO );
             selected.setText( "Selected Word" );
-            selected.setSelection( true );
             Button root = new Button( panel, SWT.RADIO );
             root.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
             root.setText( "Root" );
             
-            text.setFocus();
-            selected.addListener( SWT.Selection, new Listener() {
-                	public void handleEvent( Event e ) {
-                	    fSelected = selected.getSelection();
-                	}
-            });
+            if( selectedWiki == null ) {
+                root.setSelection( true );
+                selected.setEnabled( false );
+            } else {
+                selected.setSelection( true );
+            }
             
+            text.setFocus();
+
             return panel;
         }
         
