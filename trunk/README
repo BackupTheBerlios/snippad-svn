@@ -6,6 +6,14 @@ in fact, it uses a wiki rendering engine(radeox) as it's backend. The name
 comes from the wiki software that also uses radeox as it's engine, SnipSnap 
 (http://www.snipsnap.org). 
 
+Install
+-------
+
+For the source release, 'ant jar' needs to be run first, to create the 
+binary jar file. Then 'snippad.sh' can be run to actually run SnipPad. I haven't
+created a batch file for Windows yet, but it's relatively easy to do based on 
+snippad.sh.
+
 Usage
 -----
 
