@@ -67,7 +67,16 @@ public class WikiWord {
     
     public void setName( String name ) { this.name = name; }
     public void setWikiText( String text ) { this.wikiText = text; }
-    public void setParent( WikiWord parent ) { this.parent = parent; }
+    
+    public void setParent( WikiWord parent ) {
+        if( this.parent != null ) {
+            this.parent.deleteWikiWord( this );
+        }
+        this.parent = parent;
+        if( parent != null ) {
+            parent.addWikiWord( this );
+        }
+    }
 
     /**
      * Sets the HTML text for this wikiword. Adds the base html tags, plus the
@@ -85,11 +94,20 @@ public class WikiWord {
         this.htmlText = html; 
     }
     
-    
+    /**
+     * Adds a child word to this word.
+     * @param word The child to add
+     */
     public void addWikiWord( WikiWord word ) {
-        wikiWords.add( word );
+        if( !wikiWords.contains( word ) ) {
+            wikiWords.add( word );
+        }
     }
     
+    /**
+     * Deletes a child word from this word.
+     * @param word The child to remove
+     */
     public void deleteWikiWord( WikiWord word ) {
         wikiWords.remove( word );
     }
