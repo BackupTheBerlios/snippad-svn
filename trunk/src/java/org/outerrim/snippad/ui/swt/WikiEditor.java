@@ -72,7 +72,6 @@ public class WikiEditor extends Composite {
     }
 
     public void setText( String text ) {
-        log.debug( "setText()" );
         editor.setText( text );
         this.text = text;
         modified = false;
