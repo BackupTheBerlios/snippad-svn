@@ -42,6 +42,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
@@ -55,6 +57,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.outerrim.snippad.SnipPadConstants;
 import org.outerrim.snippad.data.WikiWord;
+import org.outerrim.snippad.service.SnipPadRenderEngine;
+import org.outerrim.snippad.service.WikiWordUtils;
 import org.outerrim.snippad.service.config.Configuration;
 import org.outerrim.snippad.service.config.ConfigurationException;
 import org.outerrim.snippad.ui.swt.actions.AboutAction;
@@ -72,9 +76,7 @@ import org.outerrim.snippad.ui.swt.actions.ShowEditorAction;
 import org.outerrim.snippad.ui.swt.dnd.WikiTransfer;
 import org.outerrim.snippad.ui.swt.dnd.WikiWordDragListener;
 import org.outerrim.snippad.ui.swt.dnd.WikiWordTreeDropAdapter;
-import org.radeox.api.engine.RenderEngine;
 import org.radeox.api.engine.context.RenderContext;
-import org.radeox.engine.BaseRenderEngine;
 import org.radeox.engine.context.BaseRenderContext;
 
 /**
@@ -87,7 +89,7 @@ public class SnipPad extends ApplicationWindow {
     private WikiEditor text;
     private SashForm editorSash;
     private RenderContext wikiContext = new BaseRenderContext();
-    private RenderEngine wikiEngine = new BaseRenderEngine();
+    private SnipPadRenderEngine wikiEngine = new SnipPadRenderEngine();
     
     private String loadedFilename;
     private WikiWord rootWiki;
@@ -116,7 +118,9 @@ public class SnipPad extends ApplicationWindow {
     public SnipPad() {
         super( null );
         
-        // Render a blank String, which will pre-load the wiki engine
+        // Load wiki engine and render a blank String, which will pre-load 
+        // the wiki engine
+        wikiContext.setRenderEngine( wikiEngine );
         wikiEngine.render( "", wikiContext );
         
         // Load config
@@ -167,6 +171,7 @@ public class SnipPad extends ApplicationWindow {
         rootWiki = wiki;
         
         tree.setInput( rootWiki );
+        wikiEngine.setDocument( rootWiki );
         
         actionSaveWiki.setEnabled( true );
         actionSaveAsWiki.setEnabled( true );
@@ -265,6 +270,7 @@ public class SnipPad extends ApplicationWindow {
         editorSash = new SashForm( sashForm, SWT.VERTICAL );
 
         browser = new Browser( editorSash, SWT.BORDER );
+        browser.addLocationListener( new WikiLocationListener() );
         actionPrint.setBrowser( browser );
         text = new WikiEditor( editorSash, this );
         text.setEnabled( false );
@@ -440,8 +446,38 @@ public class SnipPad extends ApplicationWindow {
      */
     private void updateBrowser( String html ) {
         browser.setText( selectedWikiWord.getHtmlText() );
-        browser.update();        
+        browser.update(); 
     }
+    
+    private class WikiLocationListener 
+    implements LocationListener {
+        /**
+         * @see org.eclipse.swt.browser.LocationListener#changed(org.eclipse.swt.browser.LocationEvent)
+         */
+        public void changed( LocationEvent event ) {
+            // TODO Implement Back/Forward ability
+        }
+        
+        /**
+         * @see org.eclipse.swt.browser.LocationListener#changing(org.eclipse.swt.browser.LocationEvent)
+         */
+        public void changing( LocationEvent event ) {
+            // Check to see if we are a wiki:// URL
+            if( event.location.startsWith( "wiki" ) ) {
+                log.debug( "Going to location : " + event.location );
+                String location = event.location.replaceAll( "wiki://", "" );
+                WikiWord link = WikiWordUtils.wordExists( rootWiki, location );
+                if( link == null ) {
+                    log.error( "Linked word does not exist" );
+                }
+                IStructuredSelection selection = new StructuredSelection( link );
+                tree.setSelection( selection, true );
+                
+                // Set doit to false so the browser itself doesn't try to navigate
+                event.doit = false;
+            }
+        }
+}
     
     /**
      * Retrieves the Configuration object containing the preferences.
