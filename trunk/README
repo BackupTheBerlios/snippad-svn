@@ -28,3 +28,9 @@ Future Plans
 Syntax highlighting for the text editor a is big one, along with the ability to 
 edit pages of a SnipSnap site through SnipPad (which can then make use of the 
 syntax highlighting).
+
+Icons
+-----
+
+Icons used are from the Eclipse project (http://www.eclipse.org), licensed under
+the Common Public License (CPL).
