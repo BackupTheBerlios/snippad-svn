@@ -1,5 +1,4 @@
 body {
-#    color: #FF0000;
     font-size: 12px;
     font-family: "Lucida Grande", "Trebuchet MS", Verdana, Geneva, Lucida, Helvetica, sans-serif;
 }
@@ -16,4 +15,19 @@ body {
 
 .quote {
     background-color: #EEEEEE;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.wiki-table {
+    width:100%;
+}
+
+.table-even {
+    background-color: #EEEEEE;
+}
+
+td {
+    padding-left: 4px;
+    padding-right: 4px;
 }
