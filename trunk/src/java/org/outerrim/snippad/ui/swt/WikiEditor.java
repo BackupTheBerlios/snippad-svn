@@ -27,6 +27,8 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -96,26 +98,35 @@ public class WikiEditor extends Composite {
         layout.numColumns = 1;
         setLayout( layout );
 
-        editor = new Text( this, SWT.BORDER | 
-                           		 SWT.MULTI | 
-                           		 SWT.WRAP | 
-                           		 SWT.H_SCROLL | 
-                           		 SWT.V_SCROLL );
+        editor = new Text( this, SWT.BORDER 
+                           		 	| SWT.MULTI 
+                           		 	| SWT.WRAP 
+                           		 	| SWT.H_SCROLL 
+                           		 	| SWT.V_SCROLL );
         GridData editorData = new GridData( GridData.FILL,
                                             GridData.FILL,
                                             true,
                                             true );
         editor.setLayoutData( editorData );
+		
+		// Both listeners are needed to make sure that the document isn't set as modified when we
+		// setText(), but only when an actual key is pressed. The ModifyListener is need to make
+		// sure that we only set the text as modified (which setText() then immediately marks as
+		// not modified), not when a meta key is pressed (Like Ctrl when copying text, etc).
         editor.addKeyListener( new KeyListener() {
             public void keyReleased( KeyEvent event ) {
-                modified = true;
-                if( !window.isModified() ) {
+                if( modified ) {
                     window.setModified( true );
                 }
             }
             
             public void keyPressed( KeyEvent event ) {}
         });
+		editor.addModifyListener( new ModifyListener() {
+			public void modifyText( ModifyEvent e ) {
+				modified = true;
+			}
+		});
         
         Composite buttonBar = new Composite( this, SWT.NONE );
         buttonBar.setLayout( new RowLayout() );
