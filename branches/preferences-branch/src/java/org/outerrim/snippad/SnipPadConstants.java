@@ -29,5 +29,6 @@ public class SnipPadConstants {
     static public final String VERSION = "0.3";
     static public final String PREFERENCE_FILENAME = 
         	System.getProperty( "user.home" ) +
+        	System.getProperty( "file.separator" ) +
         	".snippad";
 }
