@@ -112,6 +112,9 @@ public class SnipPad extends ApplicationWindow {
     public SnipPad() {
         super( null );
         
+        // Render a blank String, which will pre-load the wiki engine
+        wikiEngine.render( "", wikiContext );
+        
         // Load config
         try {
             config.load();
