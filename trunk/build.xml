@@ -10,6 +10,7 @@
             Wiki (Snip) Editor
     </description>
 	<property name="name" value="snippad"/>
+	<property file="${os.name}.properties"/>
 	
 	<property name="src.dir" value="src/java"/>
 	<property name="test.src.dir" value="src/test"/>
@@ -22,7 +23,10 @@
 	
 	<path id="classpath">
 		<fileset dir="${lib.dir}">
-			<include name="**/*.jar"/>
+			<include name="*.jar"/>
+		</fileset>
+		<fileset dir="${library.dir}">
+			<include name="*.jar"/>
 		</fileset>
 	</path>
 	
@@ -47,6 +51,7 @@
          - - - - - - - - - - - - - - - - - -->
     <target name="init">
     	<mkdir dir="${build.dir}"/>
+	<echo message="OS Name : ${os.name}"/>
     </target>
 	
     <!-- - - - - - - - - - - - - - - - - - 
