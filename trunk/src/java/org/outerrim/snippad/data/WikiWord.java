@@ -23,7 +23,6 @@
 package org.outerrim.snippad.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -67,7 +66,7 @@ public class WikiWord {
      * @return List containing the children WikiWords
      */
     public List getWikiWords() {
-        return Collections.unmodifiableList( wikiWords );
+        return wikiWords;
     }
     
     public void setName( String name ) { this.name = name; }
