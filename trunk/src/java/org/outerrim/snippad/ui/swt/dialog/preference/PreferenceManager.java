@@ -1,6 +1,6 @@
 /*
- * PreferencesAction.java
- * Created on Sep 18, 2004
+ * PreferenceManager.java
+ * Created on Nov 23, 2004
  * 
  * Copyright (c)2004 Michael Osterlie
  * 
@@ -20,31 +20,19 @@
  * along with Foobar; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.outerrim.snippad.ui.swt.actions;
-
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.outerrim.snippad.ui.swt.SnipPad;
-import org.outerrim.snippad.ui.swt.dialog.preference.PreferenceManager;
+package org.outerrim.snippad.ui.swt.dialog.preference;
 
 /**
- * Opens the Preferences dialog.
  * @author darkjedi
  */
-public class PreferencesAction extends Action {
-    private SnipPad window;
+public class PreferenceManager 
+		extends org.eclipse.jface.preference.PreferenceManager {
     
-    public PreferencesAction( SnipPad w ) {
-        window = w;
-        setText( "&Preferences" );
-        setToolTipText( "Show wreferences dialog" );
-    }
+    private GeneralPreferencePage browserPage = new GeneralPreferencePage();
     
-    /**
-     * @see org.eclipse.jface.action.IAction#run()
-     */
-    public void run() {
-        PreferenceDialog prefDialog = new PreferenceDialog( window.getShell(), new PreferenceManager() );
-        prefDialog.open();
+    public PreferenceManager() {
+        super();
+        
+        addToRoot( browserPage.getNode() );
     }
 }

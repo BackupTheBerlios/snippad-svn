@@ -1,6 +1,6 @@
 /*
- * ConfigurationDriver.java
- * Created on Oct 8, 2004
+ * SnipPadConstants.java
+ * Created on Dec 1, 2004
  * 
  * Copyright (c)2004 Michael Osterlie
  * 
@@ -20,26 +20,15 @@
  * along with Foobar; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package org.outerrim.snippad.service.config;
+package org.outerrim.snippad;
 
 /**
- * Interface for processing of the configuration.
  * @author darkjedi
  */
-public interface ConfigurationDriver {
-    /**
-     * Save the configuration.
-     * @param config Configuration object holding the preferences
-     * @throws ConfigurationException On an error saving the preferences
-     */
-    public abstract void save( Configuration config )
-    throws ConfigurationException;
-
-    /**
-     * Load the configuration.
-     * @return Configuration object holding the preferences.
-     * @throws ConfigurationException On an error loading the preferences.
-     */
-    public abstract Configuration load() 
-    throws ConfigurationException;
+public class SnipPadConstants {
+    static public final String VERSION = "0.3";
+    static public final String PREFERENCE_FILENAME = 
+        	System.getProperty( "user.home" ) +
+        	System.getProperty( "file.separator" ) +
+        	".snippad";
 }

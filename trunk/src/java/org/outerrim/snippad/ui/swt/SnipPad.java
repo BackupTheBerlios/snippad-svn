@@ -45,14 +45,14 @@ import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.outerrim.snippad.SnipPadConstants;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.config.Configuration;
-import org.outerrim.snippad.service.config.ConfigurationDriver;
-import org.outerrim.snippad.service.config.ConfigurationDriverPropertiesImpl;
 import org.outerrim.snippad.service.config.ConfigurationException;
 import org.outerrim.snippad.ui.swt.actions.AboutAction;
 import org.outerrim.snippad.ui.swt.actions.DeleteWikiWordAction;
@@ -99,10 +99,8 @@ public class SnipPad extends ApplicationWindow {
     private AboutAction actionAbout;
     
     static private Configuration config = new Configuration();
-    static private ConfigurationDriver configDriver = new ConfigurationDriverPropertiesImpl();
     
-    static private String VERSION = "0.1";
-    static private String TITLE = "SnipPad v" + VERSION;
+    static private String TITLE = "SnipPad v" + SnipPadConstants.VERSION;
     static private Log log = LogFactory.getLog( SnipPad.class );
     
     public SnipPad() {
@@ -110,7 +108,7 @@ public class SnipPad extends ApplicationWindow {
         
         // Load config
         try {
-            config = configDriver.load();
+            config.load();
         } catch( ConfigurationException E ) {
             if( E.getCause() instanceof FileNotFoundException ) {
                 log.info( "Config file not found, not saved?" );
@@ -120,7 +118,7 @@ public class SnipPad extends ApplicationWindow {
         }
     }
     
-    public String getVersion() { return VERSION; }
+    public String getVersion() { return SnipPadConstants.VERSION; }
     public WikiWord getRootWiki() { return rootWiki; }
     public WikiWord getSelectedWiki() { return selectedWikiWord; }
     public String getLoadedFilename() { return loadedFilename; }
@@ -191,7 +189,9 @@ public class SnipPad extends ApplicationWindow {
      */
     public boolean close() {
         try {
-            configDriver.save( config );
+            Point currentSize = this.getShell().getSize();
+            config.setInitialSize( currentSize.x, currentSize.y );
+            config.save();
         } catch( ConfigurationException E ) {
             logError( "Cannot save configuration", E );
         }
@@ -402,12 +402,6 @@ public class SnipPad extends ApplicationWindow {
      * @return Configuration of the application
      */
     static public Configuration getConfiguration() { return config; }
-    
-    /**
-     * Retrieves the Configuration Driver
-     * @return A ConfigurationDriver implementation
-     */
-    static public ConfigurationDriver getConfigurationDriver() { return configDriver; }
     
     /**
      * Logs and displays an error.
