@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.outerrim.snippad.SnipPadConstants;
 import org.outerrim.snippad.data.WikiWord;
@@ -208,6 +209,13 @@ public class SnipPad extends ApplicationWindow {
      */
     public boolean close() {
         try {
+            if( isModified() == true ) {
+    	        MessageBox message = new MessageBox( getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
+    	        message.setMessage( "Document not saved, still exit?" );
+    	        int confirm = message.open();
+    	        if( confirm == SWT.NO ) { return false; }
+            }
+            
             Point currentSize = this.getShell().getSize();
             config.setInitialSize( currentSize.x, currentSize.y );
             config.save();

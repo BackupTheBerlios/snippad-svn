@@ -23,8 +23,6 @@
 package org.outerrim.snippad.ui.swt.actions;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -44,13 +42,6 @@ public class ExitAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */    
     public void run() {
-        if( window.isModified() == true ) {
-	        MessageBox message = new MessageBox( window.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
-	        message.setMessage( "Document not saved, still exit?" );
-	        int confirm = message.open();
-	        if( confirm == SWT.NO ) { return; }
-        }
-        
         window.close();
     }
 }
