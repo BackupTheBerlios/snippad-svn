@@ -7,6 +7,11 @@ do
     CLASSPATH=${CLASSPATH}:${LIBRARY_PATH}${file}
 done
 
+for file in `ls lib/linux/*.jar`
+do
+    CLASSPATH=${CLASSPATH}:${file}
+done
+
 # Add the main snippad jar
 CLASSPATH=$SNIPPAD_JAR:$CLASSPATH
 
