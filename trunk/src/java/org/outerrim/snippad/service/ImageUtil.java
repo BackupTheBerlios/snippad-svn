@@ -41,15 +41,18 @@ public class ImageUtil {
     static public ImageRegistry getImageRegistry() {
         if( registry == null ) {
             registry = new ImageRegistry();
-            URL saveas = registry.getClass().getResource( "/icons/gtk-save-as.gif" );
-            URL open = registry.getClass().getResource( "/icons/gtk-open.gif" );
-            URL newWiki = registry.getClass().getResource( "/icons/gtk-new.gif" );
-            registry.put( "saveas",
-                          ImageDescriptor.createFromURL( saveas ) );
+            URL save = registry.getClass().getResource( "/icons/gtk-save.png" );
+            registry.put( "save",
+                          ImageDescriptor.createFromURL( save ) );
+            URL newdoc = registry.getClass().getResource( "/icons/gtk-new.png" );
+            registry.put( "new",
+                          ImageDescriptor.createFromURL( newdoc ) );
+            URL open = registry.getClass().getResource( "/icons/gtk-open.png" );
             registry.put( "open",
                           ImageDescriptor.createFromURL( open ) );
-            registry.put( "newWiki",
-                          ImageDescriptor.createFromURL( newWiki ) );
+            URL print = registry.getClass().getResource( "/icons/gtk-print.png" );
+            registry.put( "print",
+                          ImageDescriptor.createFromURL( print ) );
         }
         
         return registry;

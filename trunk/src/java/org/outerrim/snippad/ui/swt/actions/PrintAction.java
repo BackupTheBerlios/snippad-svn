@@ -24,6 +24,7 @@ package org.outerrim.snippad.ui.swt.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.swt.browser.Browser;
+import org.outerrim.snippad.service.ImageUtil;
 
 /**
  * @author darkjedi
@@ -34,6 +35,7 @@ public class PrintAction extends Action {
     public PrintAction() {
         setText( "&Print@Ctrl+P" );
         setToolTipText( "Print current Snip" );
+		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "print" ) );
     }
     
     public void setBrowser( Browser b ) {

@@ -252,6 +252,7 @@ public class SnipPad extends ApplicationWindow {
         
         addStatusLine();
         addMenuBar();
+		addToolBar( SWT.FLAT );
         
         super.configureShell( shell );
     }
@@ -354,10 +355,13 @@ public class SnipPad extends ApplicationWindow {
     protected ToolBarManager createToolBarManager( int style ) {
         ToolBarManager toolBar = new ToolBarManager( style );
         
+		toolBar.add( actionNew );
         toolBar.add( actionOpen );
         toolBar.add( actionSaveWiki );
-        toolBar.add( actionEdit );
-        toolBar.add( actionNewWikiWord );
+		toolBar.add( new Separator() );
+		toolBar.add( actionPrint );
+//        toolBar.add( actionEdit );
+//        toolBar.add( actionNewWikiWord );
 
         return toolBar;
     }

@@ -29,6 +29,7 @@ import org.eclipse.jface.action.Action;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
+import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -48,6 +49,7 @@ public class SaveWikiAction extends Action {
         actionSaveAs = saveAs;
         setText( "&Save@Ctrl+S" );
         setToolTipText( "Save the Wiki" );
+		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "save" ) );
     }
     
     /**
