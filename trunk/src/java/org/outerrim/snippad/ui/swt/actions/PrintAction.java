@@ -44,6 +44,6 @@ public class PrintAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        browser.setUrl( "javascript:print()" );
+        browser.execute( "print()" );
     }
 }
