@@ -1,13 +1,14 @@
 #!/bin/bash
 LIBRARY_PATH=lib/
+NATIVE_LIB=${LIBRARY_PATH}/linux/
 SNIPPAD_JAR=dist/snippad.jar
 
-for file in `ls lib`
+for file in `ls ${LIBRARY_PATH}/*.jar`
 do
-    CLASSPATH=${CLASSPATH}:${LIBRARY_PATH}${file}
+    CLASSPATH=${CLASSPATH}:${file}
 done
 
-for file in `ls lib/linux/*.jar`
+for file in `ls ${NATIVE_LIB}/*.jar`
 do
     CLASSPATH=${CLASSPATH}:${file}
 done
