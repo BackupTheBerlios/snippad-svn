@@ -43,7 +43,6 @@ import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Point;
@@ -51,7 +50,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.outerrim.snippad.SnipPadConstants;
 import org.outerrim.snippad.data.WikiWord;
@@ -87,7 +85,6 @@ public class SnipPad extends ApplicationWindow {
     private String loadedFilename;
     private WikiWord rootWiki;
     private WikiWord selectedWikiWord;
-    private MenuItem popupNewWord;
     private boolean modified;
     
     // Actions
@@ -162,7 +159,6 @@ public class SnipPad extends ApplicationWindow {
         actionSaveWiki.setEnabled( true );
         actionSaveAsWiki.setEnabled( true );
         actionNewWikiWord.setEnabled( true );
-        popupNewWord.setEnabled( true );
     }
     
     public boolean isModified() { return modified; }
@@ -330,18 +326,12 @@ public class SnipPad extends ApplicationWindow {
      * @return Menu containing the entries
      */
     private Menu createTreePopupMenu() {
-        Menu popupMenu = new Menu( getShell(), SWT.POP_UP );
         
-        popupNewWord = new MenuItem( popupMenu, SWT.PUSH );
-        popupNewWord.setText( "New Word" );
-        popupNewWord.addSelectionListener( new SelectionAdapter() {
-            public void widgetSelected( SelectionEvent se ) {
-                actionNewWikiWord.run();
-            }
-        });
-        
-        popupNewWord.setEnabled( false );
-        return popupMenu;
+        MenuManager popupMenu = new MenuManager();
+        popupMenu.add( actionNewWikiWord );
+        popupMenu.add( actionDeleteWikiWord );
+
+        return popupMenu.createContextMenu( tree.getTree() );
     }
     
     private String getTitle( String f ) {
