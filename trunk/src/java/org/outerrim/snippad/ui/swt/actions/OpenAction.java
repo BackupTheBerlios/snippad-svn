@@ -70,6 +70,7 @@ public class OpenAction extends Action {
         dialog.setFilterNames( new String[] { "Snippad Files", "All Files (*,*)" } );
         dialog.setFilterExtensions( new String[] { "*.snip", "*,*" } );
         dialog.setFilterPath( SnipPad.getConfiguration().getDefaultSaveAsLocation() );
+        dialog.setFileName( "test.snip" );
         String filename = dialog.open();
         if( filename == null ) { return; }
         
