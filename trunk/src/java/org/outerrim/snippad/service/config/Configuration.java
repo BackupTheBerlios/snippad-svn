@@ -61,6 +61,11 @@ public class Configuration {
     public void save() 
     throws ConfigurationException {
         try {
+			Iterator it = recentDocuments.iterator();
+			for( int i = 1; it.hasNext(); ++i ) {
+				store.setValue( RECENT_DOCUMENT + "." + i, (String)it.next() );
+			}
+			
             store.save();
         } catch( IOException E ) {
             throw new ConfigurationException( E );
@@ -71,6 +76,14 @@ public class Configuration {
     throws ConfigurationException {
         try {
             store.load();
+			
+			int recent = store.getInt( NUMBER_RECENT );
+			for( int i = 0; i < recent ; ++i ) {
+				String file = store.getString( RECENT_DOCUMENT + "." + i );
+				if( !file.equals( "" ) ) {
+					recentDocuments.add( file );
+				}
+			}
         } catch( IOException E ) {
             throw new ConfigurationException( E );
         }
