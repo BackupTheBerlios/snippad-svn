@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.outerrim.snippad.data.WikiWord;
+import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -51,7 +52,7 @@ public class NewWikiWordAction extends Action {
         window = w;
         setText( "New &Word@Ctrl+W" );
         setToolTipText( "Create a new node attached to the selected node" );
-//        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "newWiki" ) );
+        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "newword" ) );
     }
     
     /**

@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
+import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -49,7 +50,7 @@ public class SaveAsWikiAction extends Action {
         window = w;
         setText( "Save &As" );
         setToolTipText( "Save wikis to file" );
-//        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "saveas" ) );
+        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "saveas" ) );
     }
     
     /**

@@ -26,6 +26,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.outerrim.snippad.data.WikiWord;
+import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -39,6 +40,7 @@ public class DeleteWikiWordAction extends Action {
         window = w;
         setText( "&Delete Word@Ctrl+D" );
         setToolTipText( "Delete the selected wiki word" );
+		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "deleteword" ) );
     }
 
     /**

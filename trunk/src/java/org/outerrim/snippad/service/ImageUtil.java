@@ -41,18 +41,30 @@ public class ImageUtil {
     static public ImageRegistry getImageRegistry() {
         if( registry == null ) {
             registry = new ImageRegistry();
-            URL save = registry.getClass().getResource( "/icons/gtk-save.png" );
+            URL save = registry.getClass().getResource( "/icons/save_edit.gif" );
             registry.put( "save",
                           ImageDescriptor.createFromURL( save ) );
-            URL newdoc = registry.getClass().getResource( "/icons/gtk-new.png" );
+            URL saveas = registry.getClass().getResource( "/icons/saveas_edit.gif" );
+            registry.put( "saveas",
+                          ImageDescriptor.createFromURL( saveas ) );
+            URL newdoc = registry.getClass().getResource( "/icons/newfile_wiz.gif" );
             registry.put( "new",
                           ImageDescriptor.createFromURL( newdoc ) );
-            URL open = registry.getClass().getResource( "/icons/gtk-open.png" );
+            URL open = registry.getClass().getResource( "/icons/restore_log.gif" );
             registry.put( "open",
                           ImageDescriptor.createFromURL( open ) );
-            URL print = registry.getClass().getResource( "/icons/gtk-print.png" );
+            URL print = registry.getClass().getResource( "/icons/print_edit.gif" );
             registry.put( "print",
                           ImageDescriptor.createFromURL( print ) );
+            URL newword = registry.getClass().getResource( "/icons/import_log.gif" );
+            registry.put( "newword",
+                          ImageDescriptor.createFromURL( newword ) );
+            URL deleteword = registry.getClass().getResource( "/icons/remove.gif" );
+            registry.put( "deleteword",
+                          ImageDescriptor.createFromURL( deleteword ) );
+            URL renameword = registry.getClass().getResource( "/icons/refresh.gif" );
+            registry.put( "renameword",
+                          ImageDescriptor.createFromURL( renameword ) );
         }
         
         return registry;

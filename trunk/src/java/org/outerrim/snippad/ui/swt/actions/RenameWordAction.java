@@ -8,6 +8,7 @@ package org.outerrim.snippad.ui.swt.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
@@ -23,6 +24,7 @@ public class RenameWordAction extends Action {
         window = w;
         setText( "&Rename Word@Ctrl+R" );
         setToolTipText( "Renames currently selected word" );
+		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "renameword" ) );
     }
 
     public void run() {
