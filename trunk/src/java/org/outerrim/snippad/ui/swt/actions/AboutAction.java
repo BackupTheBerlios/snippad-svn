@@ -22,19 +22,16 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.eclipse.swt.widgets.Display;
+import org.outerrim.snippad.SnipPadConstants;
 
 /**
  * Action to display an about dialog.
  * @author darkjedi
  */
-public class AboutAction extends Action {
-    private SnipPad window;
-    
-    public AboutAction( SnipPad w ) {
-        window = w;
+public class AboutAction extends SnipPadBaseAction {
+    public AboutAction() {
         setText( "&About" );
         setToolTipText( "About SnipPad" );
     }
@@ -43,7 +40,7 @@ public class AboutAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        String message = "SnipPad v" + window.getVersion();
-        MessageDialog.openInformation( window.getShell(), "About SnipPad", message );
+        String message = "SnipPad v" + SnipPadConstants.VERSION;
+        MessageDialog.openInformation( Display.getCurrent().getActiveShell(), "About SnipPad", message );
     }
 }

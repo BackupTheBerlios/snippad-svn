@@ -25,8 +25,7 @@ package org.outerrim.snippad.ui.swt;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,15 +35,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * Editor object for wiki text.
  * @author darkjedi
  */
 public class WikiEditor extends Composite {
-    private SnipPad window;
-    private Text editor;
+    private StyledText editor;
     private Button btnRevert;
     private Button btnSave;
     private boolean modified;
@@ -56,9 +53,8 @@ public class WikiEditor extends Composite {
      */
     private String text;
     
-    public WikiEditor( Composite parent, SnipPad pad ) {
+    public WikiEditor( Composite parent ) {
         super( parent, SWT.BORDER );
-        window = pad;
         
         buildLayout();
     }
@@ -98,30 +94,34 @@ public class WikiEditor extends Composite {
         layout.numColumns = 1;
         setLayout( layout );
 
-        editor = new Text( this, SWT.BORDER 
-                           		 	| SWT.MULTI 
-                           		 	| SWT.WRAP 
-                           		 	| SWT.H_SCROLL 
-                           		 	| SWT.V_SCROLL );
-        GridData editorData = new GridData( GridData.FILL,
-                                            GridData.FILL,
-                                            true,
-                                            true );
+        editor = new StyledText( 
+				this, 
+				SWT.BORDER 
+                	| SWT.MULTI 
+                    | SWT.WRAP 
+                    | SWT.H_SCROLL 
+                    | SWT.V_SCROLL );
+        GridData editorData = new GridData( 
+				GridData.FILL,
+                GridData.FILL,
+                true,
+                true );
         editor.setLayoutData( editorData );
 		
 		// Both listeners are needed to make sure that the document isn't set as modified when we
 		// setText(), but only when an actual key is pressed. The ModifyListener is need to make
 		// sure that we only set the text as modified (which setText() then immediately marks as
 		// not modified), not when a meta key is pressed (Like Ctrl when copying text, etc).
-        editor.addKeyListener( new KeyListener() {
-            public void keyReleased( KeyEvent event ) {
-                if( modified ) {
-                    window.setModified( true );
-                }
-            }
-            
-            public void keyPressed( KeyEvent event ) {}
-        });
+        // Or maybe not, as the modifyListener works alone (which makes sense, duh)
+//        editor.addKeyListener( new KeyListener() {
+//            public void keyReleased( KeyEvent event ) {
+//                if( modified ) {
+//                    //window.setModified( true );
+//                }
+//            }
+//            
+//            public void keyPressed( KeyEvent event ) {}
+//        });
 		editor.addModifyListener( new ModifyListener() {
 			public void modifyText( ModifyEvent e ) {
 				modified = true;
@@ -160,6 +160,5 @@ public class WikiEditor extends Composite {
     private void handleSave() {
         modified = false;
         text = editor.getText();
-        window.setModified( true );
     }
 }

@@ -2,23 +2,20 @@ package org.outerrim.snippad.ui.swt.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
-public class MoveWordForwardAction extends Action {
-	private SnipPad window;
-	
-	public MoveWordForwardAction( SnipPad w ) {
-		window = w;
+public class MoveWordForwardAction extends SnipPadBaseAction {
+	public MoveWordForwardAction() {
         setText( "&Move Forward" );
         setToolTipText( "Move word into the word above it" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "forward" ) );		
 	}
 	
 	public void run() {
-		WikiWord selected = window.getSelectedWiki();
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+		WikiWord selected = viewer.getSelectedWiki();
 		if( selected == null ) {
 			return;
 		}
@@ -35,7 +32,7 @@ public class MoveWordForwardAction extends Action {
 		siblings.remove( selected );
 		newParent.addWikiWord( selected );
 		
-		window.setModified( true );
-		window.refreshTree();
+		viewer.setModified( true );
+		viewer.refreshTree();
 	}
 }

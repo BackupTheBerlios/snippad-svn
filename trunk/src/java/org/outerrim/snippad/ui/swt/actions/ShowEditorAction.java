@@ -22,18 +22,14 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
  * Toggles the showing of the wiki text editor.
  * @author darkjedi
  */
-public class ShowEditorAction extends Action {
-    private SnipPad window;
-    
-    public ShowEditorAction( SnipPad w ) {
-        window = w;
+public class ShowEditorAction extends SnipPadBaseAction {
+    public ShowEditorAction() {
         setText( "Show &Editor@Ctrl+E");
         setToolTipText( "Show the Wiki editor" );
         setChecked( SnipPad.getConfiguration().showEditor() );
@@ -43,6 +39,6 @@ public class ShowEditorAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        window.showEditor( isChecked() );
+        snippad.getCurrentWikiViewer().showEditor( isChecked() );
     }
 }

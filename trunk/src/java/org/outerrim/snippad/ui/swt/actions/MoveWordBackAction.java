@@ -1,22 +1,20 @@
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
-public class MoveWordBackAction extends Action {
-	private SnipPad window;
-	
-	public MoveWordBackAction( SnipPad w ) {
-		window = w;
+public class MoveWordBackAction extends SnipPadBaseAction {
+    
+	public MoveWordBackAction() {
         setText( "&Move Back" );
         setToolTipText( "Move word back to parent word" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "back" ) );		
 	}
 	
 	public void run() {
-		WikiWord selected = window.getSelectedWiki();
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+		WikiWord selected = viewer.getSelectedWiki();
 		if( selected == null ) {
 			return;
 		}
@@ -30,7 +28,7 @@ public class MoveWordBackAction extends Action {
 		parent.deleteWikiWord( selected );
 		pParent.addWikiWord( selected );
 		
-		window.setModified( true );
-		window.refreshTree();
+        viewer.setModified( true );
+        viewer.refreshTree();
 	}
 }

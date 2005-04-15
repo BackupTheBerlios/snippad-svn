@@ -28,26 +28,24 @@ import java.io.FileOutputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
 import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * Saves the snippad document to a new file.
  * @author darkjedi
  */
-public class SaveAsWikiAction extends Action {
-    private SnipPad window;
-    
+public class SaveAsWikiAction extends SnipPadBaseAction {
     static private Log log = LogFactory.getLog( SaveAsWikiAction.class );
     
-    public SaveAsWikiAction( SnipPad w ) {
-        window = w;
+    public SaveAsWikiAction() {
         setText( "Save &As" );
         setToolTipText( "Save wikis to file" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "saveas" ) );
@@ -57,7 +55,7 @@ public class SaveAsWikiAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        FileDialog dialog = new FileDialog( window.getShell(), SWT.SAVE );
+        FileDialog dialog = new FileDialog( Display.getCurrent().getActiveShell(), SWT.SAVE );
         dialog.setFilterNames( new String[] { "SnipPad Files", "All Files (*,*)" } );
         dialog.setFilterExtensions( new String[] { "*.snip", "*,*" } );
         dialog.setFilterPath( SnipPad.getConfiguration().getDefaultSaveAsLocation() );
@@ -68,10 +66,12 @@ public class SaveAsWikiAction extends Action {
         File saveFile = new File( filename );
         String path = saveFile.getParentFile().getPath();
         SnipPad.getConfiguration().setDefaultSaveAsLocation( path );
+        
         try {
-	        WikiWord root = window.getRootWiki();
+            WikiViewer viewer = snippad.getCurrentWikiViewer();
+	        WikiWord root = viewer.getRootWiki();
 	        (new XmlSerializer()).save( root, new FileOutputStream( saveFile ) );
-	        window.setLoadedFilename( filename );
+	        viewer.setLoadedFilename( filename );
         } catch( SerializeException E ) {
             SnipPad.logError( E.getMessage(), E );
         } catch( FileNotFoundException E ) {

@@ -22,20 +22,16 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.PreferenceDialog;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.eclipse.swt.widgets.Display;
 import org.outerrim.snippad.ui.swt.dialog.preference.PreferenceManager;
 
 /**
  * Opens the Preferences dialog.
  * @author darkjedi
  */
-public class PreferencesAction extends Action {
-    private SnipPad window;
-    
-    public PreferencesAction( SnipPad w ) {
-        window = w;
+public class PreferencesAction extends SnipPadBaseAction {
+    public PreferencesAction() {
         setText( "&Preferences" );
         setToolTipText( "Show wreferences dialog" );
     }
@@ -44,7 +40,9 @@ public class PreferencesAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        PreferenceDialog prefDialog = new PreferenceDialog( window.getShell(), new PreferenceManager() );
+        PreferenceDialog prefDialog = new PreferenceDialog(
+                Display.getCurrent().getActiveShell(), 
+                new PreferenceManager() );
         prefDialog.open();
     }
 }

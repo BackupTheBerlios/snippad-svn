@@ -22,22 +22,15 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
  * Action to create a new file.
  * @author darkjedi
  */
-public class NewWikiAction extends Action {
-    private SnipPad window;
-    
-    public NewWikiAction( SnipPad w ) {
-        window = w;
+public class NewWikiAction extends SnipPadBaseAction {
+    public NewWikiAction() {
         setText( "&New@Ctrl+N" );
         setToolTipText( "Create a new Wiki" );
 		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "new" ) );
@@ -47,15 +40,8 @@ public class NewWikiAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        if( window.isModified() == true ) {
-	        MessageBox message = new MessageBox( window.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
-	        message.setMessage( "Document not saved, still open a new file?" );
-	        int confirm = message.open();
-	        if( confirm == SWT.NO ) { return; }
-        }
-
         WikiWord newWiki = new WikiWord();
         newWiki.setName( "root" );
-        window.setWiki( newWiki, null );
+        snippad.openWiki( newWiki, null );
     }
 }

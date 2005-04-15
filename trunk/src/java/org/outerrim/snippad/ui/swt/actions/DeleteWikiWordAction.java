@@ -22,22 +22,19 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * Action to delete a wikiword.
  * @author darkjedi
  */
-public class DeleteWikiWordAction extends Action {
-    private SnipPad window;
-    
-    public DeleteWikiWordAction( SnipPad w ) {
-        window = w;
+public class DeleteWikiWordAction extends SnipPadBaseAction {
+    public DeleteWikiWordAction() {
         setText( "&Delete Word@Ctrl+D" );
         setToolTipText( "Delete the selected wiki word" );
 		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "deleteword" ) );
@@ -47,20 +44,21 @@ public class DeleteWikiWordAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */    
     public void run() {
-        WikiWord selected = window.getSelectedWiki();
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+        WikiWord selected = viewer.getSelectedWiki();
         if( selected == null ) {
             return;
         }
         
-        MessageBox message = new MessageBox( window.getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
+        MessageBox message = new MessageBox( Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
         message.setMessage( "Are you sure you want to delete '" + selected.getName() + "' and all it's children?" );
         int confirm = message.open();
         if( confirm == SWT.NO ) { return; }
         
         WikiWord parent = selected.getParent();
         parent.deleteWikiWord( selected );
-        window.refreshTree();
-        window.setModified( true );
+        viewer.refreshTree();
+        viewer.setModified( true );
     }
 
 }

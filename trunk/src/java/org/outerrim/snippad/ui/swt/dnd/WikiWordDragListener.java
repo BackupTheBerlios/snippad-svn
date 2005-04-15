@@ -39,7 +39,7 @@ public class WikiWordDragListener extends DragSourceAdapter {
         }
         
         if( event.detail == DND.DROP_MOVE ) {
-            IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
+//            IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
 //			for( Iterator it = selection.iterator(); it.hasNext(); ) {
 //				WikiWord word = (WikiWord)it.next();
 //                word.getParent().deleteWikiWord( word );

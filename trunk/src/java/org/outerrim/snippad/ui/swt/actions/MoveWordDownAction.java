@@ -2,23 +2,20 @@ package org.outerrim.snippad.ui.swt.actions;
 
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
-public class MoveWordDownAction extends Action {
-	private SnipPad window;
-	
-	public MoveWordDownAction( SnipPad w ) {
-		window = w;
+public class MoveWordDownAction extends SnipPadBaseAction {
+	public MoveWordDownAction() {
         setText( "&Move Down" );
         setToolTipText( "Move word up one spot" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "down" ) );		
 	}
 	
 	public void run() {
-		WikiWord selected = window.getSelectedWiki();
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+		WikiWord selected = viewer.getSelectedWiki();
 		if( selected == null ) {
 			return;
 		}
@@ -33,7 +30,7 @@ public class MoveWordDownAction extends Action {
 		
 		words.remove( selected );
 		words.add( ++index, selected );
-		window.refreshTree();
-		window.setModified( true );
+		viewer.refreshTree();
+		viewer.setModified( true );
 	}
 }

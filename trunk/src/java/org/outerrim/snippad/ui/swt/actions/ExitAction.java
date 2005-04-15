@@ -22,18 +22,12 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
-import org.outerrim.snippad.ui.swt.SnipPad;
-
 /**
  * Action to exit the application.
  * @author darkjedi
  */
-public class ExitAction extends Action {
-    private SnipPad window;
-    
-    public ExitAction( SnipPad w ) {
-        window = w;
+public class ExitAction extends SnipPadBaseAction {
+    public ExitAction() {
         setText( "E&xit" );
         setToolTipText( "Exit SnipPad" );
     }
@@ -42,6 +36,6 @@ public class ExitAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */    
     public void run() {
-        window.close();
+        snippad.close();
     }
 }

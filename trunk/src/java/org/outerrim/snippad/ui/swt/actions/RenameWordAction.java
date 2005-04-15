@@ -6,35 +6,39 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 import org.outerrim.snippad.service.ImageUtil;
-import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * @author mikeo
  */
-public class RenameWordAction extends Action {
-    private SnipPad window;
-    
+public class RenameWordAction extends SnipPadBaseAction {
     /**
      * 
      */
-    public RenameWordAction( SnipPad w ) {
-        window = w;
+    public RenameWordAction() {
         setText( "&Rename Word@Ctrl+R" );
         setToolTipText( "Renames currently selected word" );
 		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "renameword" ) );
     }
 
     public void run() {
-        InputDialog dlg = new InputDialog( window.getShell(), "Rename Word", "New title of word", "", null );
+        InputDialog dlg = new InputDialog( 
+                Display.getCurrent().getActiveShell(), 
+                "Rename Word", 
+                "New title of word", 
+                "", 
+                null );
         int choice = dlg.open();
-        if( choice == InputDialog.OK ) {
+        if( choice == Window.OK ) {
             String title = dlg.getValue();
-            window.getSelectedWiki().setName( title );
-            window.setModified( true );
-            window.refreshTree();
+            WikiViewer viewer = snippad.getCurrentWikiViewer();
+            viewer.getSelectedWiki().setName( title );
+            viewer.setModified( true );
+            viewer.refreshTree();
         }
     }
 }

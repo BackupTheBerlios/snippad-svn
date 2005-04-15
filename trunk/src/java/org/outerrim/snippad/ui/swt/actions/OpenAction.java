@@ -27,10 +27,9 @@ import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.MessageBox;
 import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
 import org.outerrim.snippad.service.ImageUtil;
@@ -40,13 +39,10 @@ import org.outerrim.snippad.ui.swt.SnipPad;
  * Action to Open a file.
  * @author darkjedi
  */
-public class OpenAction extends Action {
-    private SnipPad window;
-    
+public class OpenAction extends SnipPadBaseAction {
     static private Log log = LogFactory.getLog( OpenAction.class );
     
-    public OpenAction( SnipPad w ) {
-        window = w;
+    public OpenAction() {
         setText( "&Open@Ctrl+O" );
         setToolTipText( "Open a SnipPad file" );
         setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "open" ) );
@@ -56,18 +52,8 @@ public class OpenAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        if( window.isModified() == true ) {
-	        MessageBox message = new MessageBox( 
-	                window.getShell(), 
-	                SWT.ICON_QUESTION | 
-	                	SWT.YES | 
-	                	SWT.NO );
-	        message.setMessage( "Document not saved, still open a file?" );
-	        int confirm = message.open();
-	        if( confirm == SWT.NO ) { return; }
-        }
 
-        FileDialog dialog = new FileDialog( window.getShell(), SWT.OPEN );
+        FileDialog dialog = new FileDialog( Display.getCurrent().getActiveShell(), SWT.OPEN );
         dialog.setFilterNames( new String[] { "Snippad Files", "All Files (*,*)" } );
         dialog.setFilterExtensions( new String[] { "*.snip", "*,*" } );
         dialog.setFilterPath( SnipPad.getConfiguration().getDefaultSaveAsLocation() );
@@ -77,7 +63,7 @@ public class OpenAction extends Action {
         
         log.debug( "Opening : " + filename );
         try {
-            window.setWiki( (new XmlSerializer()).load( new FileInputStream( filename ) ), filename );
+            snippad.openWiki( (new XmlSerializer()).load( new FileInputStream( filename ) ), filename );
         } catch( IOException E ) {
             SnipPad.logError( E.getMessage(), E );
         } catch( SerializeException E ) {

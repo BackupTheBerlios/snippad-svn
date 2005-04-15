@@ -31,21 +31,20 @@ import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
 import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.SnipPad;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * Saves the snippad document, defering to Save As if no filename is known.
  * @author darkjedi
  */
-public class SaveWikiAction extends Action {
-    private SnipPad window;
+public class SaveWikiAction extends SnipPadBaseAction {
     private Action actionSaveAs;
     
     /**
      * @param w The parent window
      * @param saveAs The Action to use as the SaveAs action if this is a new file
      */
-    public SaveWikiAction( SnipPad w, Action saveAs ) {
-        window = w;
+    public SaveWikiAction( Action saveAs ) {
         actionSaveAs = saveAs;
         setText( "&Save@Ctrl+S" );
         setToolTipText( "Save the Wiki" );
@@ -56,7 +55,8 @@ public class SaveWikiAction extends Action {
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        String filename = window.getLoadedFilename();
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+        String filename = viewer.getLoadedFilename();
         
         if( filename == null ) {	// A new Wiki, not previously loaded, do SaveAs
             actionSaveAs.run();
@@ -64,9 +64,9 @@ public class SaveWikiAction extends Action {
         }
         
         try {
-	        WikiWord root = window.getRootWiki();
+	        WikiWord root = viewer.getRootWiki();
 	        (new XmlSerializer()).save( root, new FileOutputStream( filename ) );
-	        window.setModified( false );
+	        viewer.setModified( false );
         } catch( SerializeException E ) {
             SnipPad.logError( E.getMessage(), E );
         } catch( FileNotFoundException E ) {

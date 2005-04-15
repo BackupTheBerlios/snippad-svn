@@ -22,14 +22,14 @@
  */
 package org.outerrim.snippad.ui.swt.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.swt.browser.Browser;
 import org.outerrim.snippad.service.ImageUtil;
+import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * @author darkjedi
  */
-public class PrintAction extends Action {
+public class PrintAction extends SnipPadBaseAction {
     private Browser browser;
     
     public PrintAction() {
@@ -38,14 +38,11 @@ public class PrintAction extends Action {
 		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "print" ) );
     }
     
-    public void setBrowser( Browser b ) {
-        browser = b;
-    }
-    
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
-        browser.execute( "print()" );
+        WikiViewer viewer = snippad.getCurrentWikiViewer();
+        viewer.print();
     }
 }
