@@ -89,8 +89,6 @@ public class SnipPad extends ApplicationWindow {
     public void openWiki( WikiWord word, String filename ) {
         CTabItem item = new CTabItem( tabFolder, SWT.CLOSE );
         
-        // get the filename
-        
         WikiViewer viewer = new WikiViewer( tabFolder );
         viewer.setWiki( word, filename );
         viewer.addModificationListener( new WikiViewerModificationListener() );
@@ -98,6 +96,9 @@ public class SnipPad extends ApplicationWindow {
         item.setControl( viewer );
         tabItemMap.put( viewer, item );
         tabFolder.setSelection( item );
+        
+        ActionManager.getPrintAction().setEnabled( true );
+        ActionManager.getNewWikiWordAction().setEnabled( true );
     }
     
     public List getWikiViewers() {
@@ -303,13 +304,9 @@ public class SnipPad extends ApplicationWindow {
             if( me.isModified() ) {
                 ActionManager.getSaveWikiAction().setEnabled( true );
                 ActionManager.getSaveAsWikiAction().setEnabled( true );
-                ActionManager.getPrintAction().setEnabled( true );
-                ActionManager.getNewWikiWordAction().setEnabled( true );
             } else {
                 ActionManager.getSaveWikiAction().setEnabled( false );
                 ActionManager.getSaveAsWikiAction().setEnabled( false );
-                ActionManager.getPrintAction().setEnabled( false );
-                ActionManager.getNewWikiWordAction().setEnabled( false );                                
             }
         }
         
