@@ -21,7 +21,7 @@ public class MoveWordDownAction extends SnipPadBaseAction {
 		}
 		
 		WikiWord parent = selected.getParent();
-		List words = parent.getWikiWords();
+		List<WikiWord> words = parent.getWikiWords();
 		int index = words.indexOf( selected );
 		
 		if( index == words.size() - 1 ) {

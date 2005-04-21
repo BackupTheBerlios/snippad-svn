@@ -63,8 +63,8 @@ import org.outerrim.snippad.ui.swt.actions.RecentDocumentAction;
 public class SnipPad extends ApplicationWindow {
     private CTabFolder tabFolder;
 	private MenuManager fileMenu;
-	private List recentList = new ArrayList();
-    private Map tabItemMap = new HashMap();
+	private List<RecentDocumentAction> recentList = new ArrayList<RecentDocumentAction>();
+    private Map<WikiViewer,CTabItem> tabItemMap = new HashMap<WikiViewer,CTabItem>();
 	
     static private Configuration config = new Configuration();
     
@@ -101,11 +101,11 @@ public class SnipPad extends ApplicationWindow {
         ActionManager.getNewWikiWordAction().setEnabled( true );
     }
     
-    public List getWikiViewers() {
-        List list = new LinkedList();
+    public List<WikiViewer> getWikiViewers() {
+        List<WikiViewer> list = new LinkedList<WikiViewer>();
         CTabItem[] items = tabFolder.getItems();
         for( int i = items.length - 1; i >= 0; --i ) {
-            list.add( items[i].getControl() );
+            list.add( (WikiViewer)items[i].getControl() );
         }
         return list;
     }
@@ -153,8 +153,8 @@ public class SnipPad extends ApplicationWindow {
     
     private int modifiedCount() {
         int count = 0;
-        for( Iterator it = getWikiViewers().iterator(); it.hasNext(); ) {
-            if( ((WikiViewer)it.next()).isModified() ) {
+        for( WikiViewer view : getWikiViewers() ) {
+            if( view.isModified() ) {
                 ++count;
             }
         }
@@ -267,8 +267,8 @@ public class SnipPad extends ApplicationWindow {
     }
     
 	private void updateRecentDocuments( String file ) {
-		for( Iterator it = recentList.iterator(); it.hasNext(); ) {
-			IContributionItem item = fileMenu.remove( ((IAction)it.next()).getId() );
+        for( IAction action : recentList ) {
+			IContributionItem item = fileMenu.remove( action.getId() );
 			log.debug( "Removed item : " + item );
 			if( item != null ) {
 				item.update();

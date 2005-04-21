@@ -38,7 +38,7 @@ public class WikiWord {
     private String name;
     private String wikiText;
     private WikiWord parent;
-    private List wikiWords = new ArrayList();
+    private List<WikiWord> wikiWords = new ArrayList<WikiWord>();
     
     static private final Log log = LogFactory.getLog( WikiWord.class );
     
@@ -65,7 +65,7 @@ public class WikiWord {
      * 
      * @return List containing the children WikiWords
      */
-    public List getWikiWords() {
+    public List<WikiWord> getWikiWords() {
         return wikiWords;
     }
     

@@ -6,7 +6,6 @@ package org.outerrim.snippad.ui.swt;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class WikiViewer extends Composite {
     private String loadedFilename;
     private boolean modified;
 
-    private List modificationListeners = new LinkedList();
+    private List<ModificationListener> modificationListeners = new LinkedList<ModificationListener>();
     
     static private final Log log = LogFactory.getLog( WikiViewer.class );
     
@@ -151,8 +150,8 @@ public class WikiViewer extends Composite {
     
     private void notifyModificationListeners() {
         ModifiedEvent me = new ModifiedEvent( this, modified );
-        for( Iterator it = modificationListeners.iterator(); it.hasNext(); ) {
-            ((ModificationListener)it.next()).modified( me );
+        for( ModificationListener ml : modificationListeners ) {
+            ml.modified( me );
         }
     }
     

@@ -155,9 +155,9 @@ implements WikiSerializer {
         wikiText.setText( word.getWikiText() );
         wiki.addContent( wikiText );
         
-        List wikis = word.getWikiWords();
-        for( Iterator itWikis = wikis.iterator(); itWikis.hasNext(); ) {
-            wiki.addContent( saveWikiWords( (WikiWord)itWikis.next() ) );
+        List<WikiWord> wikis = word.getWikiWords();
+        for( WikiWord wikiword : wikis ) {
+            wiki.addContent( saveWikiWords( wikiword ) );
         }
         
         return wiki;

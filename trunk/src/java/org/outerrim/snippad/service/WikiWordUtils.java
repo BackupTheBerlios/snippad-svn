@@ -22,7 +22,6 @@
  */
 package org.outerrim.snippad.service;
 
-import java.util.Iterator;
 import java.util.List;
 
 import org.outerrim.snippad.data.WikiWord;
@@ -41,10 +40,8 @@ public class WikiWordUtils {
     static public WikiWord wordExists( WikiWord parent, String name ) {
         WikiWord word = null;
         
-        List children = parent.getWikiWords();
-        for( Iterator it = children.iterator(); it.hasNext(); ) {
-            WikiWord child = (WikiWord)it.next();
-            
+        List<WikiWord> children = parent.getWikiWords();
+        for( WikiWord child : children ) {
             // First check to see if the child is what we want
             if( child.getName().equals( name ) ) {
                 word = child;
