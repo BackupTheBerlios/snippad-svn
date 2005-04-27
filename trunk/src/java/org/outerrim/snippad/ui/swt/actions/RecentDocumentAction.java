@@ -10,31 +10,46 @@ import org.outerrim.snippad.data.serialize.SerializeException;
 import org.outerrim.snippad.data.serialize.XmlSerializer;
 import org.outerrim.snippad.ui.swt.SnipPad;
 
+/**
+ * @author <a href="mailto:sithlord@berlios.de">Michael Osterlie</a>
+ */
 public class RecentDocumentAction extends SnipPadBaseAction {
-	private String displayFile;
-	private String filename;
-	
-	static private final Log log = LogFactory.getLog( RecentDocumentAction.class );
-	
-	public RecentDocumentAction( String f ) {
-		filename = f;
-		
-		int index = filename.lastIndexOf( File.separator );
-		displayFile = filename.substring( index + 1, filename.length() );
-		
-		setText( displayFile );
-		setToolTipText( "Open " + filename );
-	}
-	
-	public String getId() { return filename; }
-	
-	public void run() {
+    private String displayFile;
+    private String filename;
+
+    private static final Log LOG = LogFactory.getLog(
+            RecentDocumentAction.class );
+
+    /**
+     * @param f filename
+     */
+    public RecentDocumentAction( final String f ) {
+        filename = f;
+
+        int index = filename.lastIndexOf( File.separator );
+        displayFile = filename.substring( index + 1, filename.length() );
+
+        setText( displayFile );
+        setToolTipText( "Open " + filename );
+    }
+
+    public String getId() {
+        return filename;
+    }
+
+    /**
+     * @see org.eclipse.jface.action.IAction#run()
+     */
+    public void run() {
         try {
-            snippad.openWiki( (new XmlSerializer()).load( new FileInputStream( filename ) ), filename );
-        } catch( IOException E ) {
-            SnipPad.logError( E.getMessage(), E );
-        } catch( SerializeException E ) {
-            SnipPad.logError( E.getMessage(), E );
+            snippad.openWiki(
+                    (new XmlSerializer()).load(
+                            new FileInputStream( filename ) ),
+                    filename );
+        } catch( IOException e ) {
+            SnipPad.logError( e.getMessage(), e );
+        } catch( SerializeException e ) {
+            SnipPad.logError( e.getMessage(), e );
         }
-	}
+    }
 }

@@ -1,9 +1,9 @@
 /*
  * DialogUtils.java
  * Created on Nov 23, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -33,7 +33,11 @@ import org.eclipse.swt.widgets.Text;
  * @author darkjedi
  */
 public final class DialogUtils {
-    static public final Text createTextControl( Composite parent ) {
+    /**
+     * @param parent Parent
+     * @return TextControl
+     */
+    public static Text createTextControl( final Composite parent ) {
         Text text = new Text( parent, SWT.SINGLE | SWT.BORDER );
         GridData textData = new GridData();
         textData.horizontalAlignment = SWT.FILL;
@@ -41,16 +45,32 @@ public final class DialogUtils {
         text.setLayoutData( textData );
         return text;
     }
-    
-    static public final Label createLabel( Composite parent, String text ) {
+
+    /**
+     * @param parent Parent
+     * @param text Label text
+     * @return Label
+     */
+    public static Label createLabel(
+            final Composite parent,
+            final String text ) {
         Label label = new Label( parent, SWT.NULL );
         label.setText( text );
         return label;
     }
-    
-    static public final Button createCheckButton( Composite parent, String label ) {
+
+    /**
+     * @param parent Parent
+     * @param label Label text
+     * @return Check button
+     */
+    public static Button createCheckButton(
+            final Composite parent,
+            final String label ) {
         Button button = new Button( parent, SWT.CHECK | SWT.LEFT );
         button.setText( label );
         return button;
     }
+
+    private DialogUtils() { }
 }

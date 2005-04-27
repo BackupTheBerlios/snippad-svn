@@ -1,9 +1,9 @@
 /*
  * SnipPad.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -57,38 +57,47 @@ import org.outerrim.snippad.service.config.ConfigurationException;
 import org.outerrim.snippad.ui.swt.actions.RecentDocumentAction;
 
 /**
- * Main window for the SWT UI of SnipPad
+ * Main window for the SWT UI of SnipPad.
+ *
  * @author darkjedi
  */
 public class SnipPad extends ApplicationWindow {
     private CTabFolder tabFolder;
-	private MenuManager fileMenu;
-	private List<RecentDocumentAction> recentList = new ArrayList<RecentDocumentAction>();
-    private Map<WikiViewer,CTabItem> tabItemMap = new HashMap<WikiViewer,CTabItem>();
-	
-    static private Configuration config = new Configuration();
-    
-    static private String TITLE = "SnipPad v" + SnipPadConstants.VERSION;
-    static private Log log = LogFactory.getLog( SnipPad.class );
-    
+    private MenuManager fileMenu;
+    private List<RecentDocumentAction> recentList =
+        new ArrayList<RecentDocumentAction>();
+    private Map<WikiViewer, CTabItem> tabItemMap =
+        new HashMap<WikiViewer, CTabItem>();
+
+    private static Configuration config = new Configuration();
+
+    private static final String TITLE = "SnipPad v" + SnipPadConstants.VERSION;
+    private static final Log LOG = LogFactory.getLog( SnipPad.class );
+
+    /**
+     */
     public SnipPad() {
         super( null );
-        
+
         // Load config
         try {
             config.load();
-        } catch( ConfigurationException E ) {
-            if( E.getCause() instanceof FileNotFoundException ) {
-                log.info( "Config file not found, not saved?" );
+        } catch( ConfigurationException e ) {
+            if( e.getCause() instanceof FileNotFoundException ) {
+                LOG.info( "Config file not found, not saved?" );
             } else {
-                log.error( "Error loading configuration", E );
+                LOG.error( "Error loading configuration", e );
             }
         }
     }
-    
-    public void openWiki( WikiWord word, String filename ) {
+
+    /**
+     * @param word Root word
+     * @param filename Filename
+     */
+    public void openWiki( final WikiWord word, final String filename ) {
         CTabItem item = new CTabItem( tabFolder, SWT.CLOSE );
-        
+
         WikiViewer viewer = new WikiViewer( tabFolder );
         viewer.setWiki( word, filename );
         viewer.addModificationListener( new WikiViewerModificationListener() );
@@ -96,41 +105,56 @@ public class SnipPad extends ApplicationWindow {
         item.setControl( viewer );
         tabItemMap.put( viewer, item );
         tabFolder.setSelection( item );
-        
+
         ActionManager.getPrintAction().setEnabled( true );
         ActionManager.getNewWikiWordAction().setEnabled( true );
     }
-    
+
+    /**
+     * @return List of WikiViewers
+     */
     public List<WikiViewer> getWikiViewers() {
         List<WikiViewer> list = new LinkedList<WikiViewer>();
         CTabItem[] items = tabFolder.getItems();
         for( int i = items.length - 1; i >= 0; --i ) {
-            list.add( (WikiViewer)items[i].getControl() );
+            list.add( (WikiViewer) items[i].getControl() );
         }
         return list;
     }
-    
+
+    /**
+     * @return Currently selected WikiViewer
+     */
     public WikiViewer getCurrentWikiViewer() {
-        WikiViewer viewer = (WikiViewer)tabFolder.getSelection().getControl();
+        WikiViewer viewer = (WikiViewer) tabFolder.getSelection().getControl();
         return viewer;
     }
-    
-    public String getVersion() { return SnipPadConstants.VERSION; }
-    
+
+    public String getVersion() {
+        return SnipPadConstants.VERSION;
+    }
+
     /**
-     * Perform any cleanup necessary to exit the program (save configuration, etc).
+     * Perform any cleanup necessary to exit the program (save configuration,
+     * etc).
+     *
      * @see org.eclipse.jface.window.Window#close()
      */
     public boolean close() {
         try {
             int modified = modifiedCount();
             if( modified > 0 ) {
-    	        MessageBox message = new MessageBox( getShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
-    	        message.setMessage( modified + " document(s) not saved, still exit?" );
-    	        int confirm = message.open();
-    	        if( confirm == SWT.NO ) { return false; }
+                MessageBox message = new MessageBox(
+                        getShell(),
+                        SWT.ICON_QUESTION | SWT.YES | SWT.NO );
+                message.setMessage( modified
+                        + " document(s) not saved, still exit?" );
+                int confirm = message.open();
+                if( confirm == SWT.NO ) {
+                    return false;
+                }
             }
-            
+
             Point currentSize = this.getShell().getSize();
             config.setInitialSize( currentSize.x, currentSize.y );
             config.save();
@@ -139,18 +163,19 @@ public class SnipPad extends ApplicationWindow {
             for( int i = items.length - 1; i >= 0; --i ) {
                 Control control = items[i].getControl();
                 if( control instanceof WikiViewer ) {
-                    ((WikiViewer)control).dispose();
+                    ((WikiViewer) control).dispose();
                 } else {
-                    log.debug( "Control is not of type WikiViewer : " + control.getClass().getName() );
+                    LOG.debug( "Control is not of type WikiViewer : "
+                            + control.getClass().getName() );
                 }
             }
-        } catch( ConfigurationException E ) {
-            logError( "Cannot save configuration", E );
+        } catch( ConfigurationException e ) {
+            logError( "Cannot save configuration", e );
         }
-        
+
         return super.close();
     }
-    
+
     private int modifiedCount() {
         int count = 0;
         for( WikiViewer view : getWikiViewers() ) {
@@ -160,147 +185,154 @@ public class SnipPad extends ApplicationWindow {
         }
         return count;
     }
-    
+
     /**
-     * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+     * @see org.eclipse.jface.window.Window#configureShell(
+     *      org.eclipse.swt.widgets.Shell)
      */
-    protected void configureShell( Shell shell ) {
-        
+    protected void configureShell( final Shell shell ) {
+
         addStatusLine();
         addMenuBar();
-		addToolBar( SWT.FLAT );
-        
+        addToolBar( SWT.FLAT );
+
         ActionManager.registerSnipPad( this );
-        
+
         super.configureShell( shell );
     }
-    
+
     /**
-     * @see org.eclipse.jface.window.Window#createContents(org.eclipse.swt.widgets.Composite)
+     * @see org.eclipse.jface.window.Window#createContents(
+     *      org.eclipse.swt.widgets.Composite)
      */
-    protected Control createContents( Composite parent ) {
+    protected Control createContents( final Composite parent ) {
         getShell().setText( TITLE );
-        
+
         tabFolder = new CTabFolder( parent, SWT.BORDER | SWT.FLAT );
         tabFolder.setSimple( false );
-        
+
         return tabFolder;
     }
-    
+
     /**
      * @see org.eclipse.jface.window.Window#initializeBounds()
      */
     protected void initializeBounds() {
         getShell().setSize( config.getInitialSize() );
     }
-    
+
     /**
      * @see org.eclipse.jface.window.ApplicationWindow#createMenuManager()
      */
     protected MenuManager createMenuManager() {
         MenuManager mainMenu = new MenuManager( "" );
-        
+
         fileMenu = new MenuManager( "&File" );
         MenuManager editMenu = new MenuManager( "&Edit" );
         MenuManager helpMenu = new MenuManager( "&Help" );
-        
+
         mainMenu.add( fileMenu );
         mainMenu.add( editMenu );
         mainMenu.add( helpMenu );
-        
+
         fileMenu.add( ActionManager.getNewWikiAction() );
         fileMenu.add( ActionManager.getOpenAction() );
         fileMenu.add( ActionManager.getSaveWikiAction() );
         fileMenu.add( ActionManager.getSaveAsWikiAction() );
         fileMenu.add( new Separator() );
-        fileMenu.add( ActionManager.getPrintAction() );		
+        fileMenu.add( ActionManager.getPrintAction() );
         fileMenu.add( new Separator() {
-			public String getId() { return "RECENT"; }
-        });
-		// Recent Documents list
-		reloadRecentDocuments();
+            public String getId() {
+                return "RECENT";
+            }
+        } );
+        // Recent Documents list
+        reloadRecentDocuments();
         fileMenu.add( new Separator() );
         fileMenu.add( ActionManager.getExitAction() );
-        
+
         editMenu.add( ActionManager.getNewWikiWordAction() );
         editMenu.add( ActionManager.getRenameWordAction() );
         editMenu.add( ActionManager.getDeleteWikiWordAction() );
         editMenu.add( new Separator() );
-		editMenu.add( ActionManager.getMoveUpAction() );
-		editMenu.add( ActionManager.getMoveDownAction() );
-		editMenu.add( ActionManager.getMoveBackAction() );
-		editMenu.add( ActionManager.getMoveForwardAction() );
+        editMenu.add( ActionManager.getMoveUpAction() );
+        editMenu.add( ActionManager.getMoveDownAction() );
+        editMenu.add( ActionManager.getMoveBackAction() );
+        editMenu.add( ActionManager.getMoveForwardAction() );
         editMenu.add( new Separator() );
         editMenu.add( ActionManager.getEditAction() );
         editMenu.add( ActionManager.getPreferencesAction() );
-        
+
         helpMenu.add( ActionManager.getAboutAction() );
-        
+
         return mainMenu;
     }
-    
+
     /**
      * @see org.eclipse.jface.window.ApplicationWindow#createToolBarManager(int)
      */
-    protected ToolBarManager createToolBarManager( int style ) {
+    protected ToolBarManager createToolBarManager( final int style ) {
         ToolBarManager toolBar = new ToolBarManager( style );
-        
-		toolBar.add( ActionManager.getNewWikiAction() );
+
+        toolBar.add( ActionManager.getNewWikiAction() );
         toolBar.add( ActionManager.getOpenAction() );
         toolBar.add( ActionManager.getSaveWikiAction() );
-		toolBar.add( new Separator() );
-		toolBar.add( ActionManager.getPrintAction() );
-		toolBar.add( new Separator() );
+        toolBar.add( new Separator() );
+        toolBar.add( ActionManager.getPrintAction() );
+        toolBar.add( new Separator() );
         toolBar.add( ActionManager.getNewWikiWordAction() );
-		toolBar.add( ActionManager.getDeleteWikiWordAction() );
-		toolBar.add( new Separator() );
-		toolBar.add( ActionManager.getMoveUpAction() );
-		toolBar.add( ActionManager.getMoveDownAction() );
-		toolBar.add( ActionManager.getMoveBackAction() );
-		toolBar.add( ActionManager.getMoveForwardAction() );
-		
+        toolBar.add( ActionManager.getDeleteWikiWordAction() );
+        toolBar.add( new Separator() );
+        toolBar.add( ActionManager.getMoveUpAction() );
+        toolBar.add( ActionManager.getMoveDownAction() );
+        toolBar.add( ActionManager.getMoveBackAction() );
+        toolBar.add( ActionManager.getMoveForwardAction() );
+
         return toolBar;
     }
-    
-    private String getTitle( String f ) {
+
+    private String getTitle( final String f ) {
         return TITLE + " : " + (f == null ? "(New File)" : f);
     }
-    
-	private void updateRecentDocuments( String file ) {
+
+    private void updateRecentDocuments( final String file ) {
         for( IAction action : recentList ) {
-			IContributionItem item = fileMenu.remove( action.getId() );
-			log.debug( "Removed item : " + item );
-			if( item != null ) {
-				item.update();
-			}
-		}
-		recentList.clear();
-		
-		getConfiguration().addRecentDocument( file );
-		reloadRecentDocuments();
-	}
-	
-	private void reloadRecentDocuments() {
-		for( Iterator it = getConfiguration().getRecentDocumentsIterator(); it.hasNext(); ) {
-            RecentDocumentAction action = new RecentDocumentAction( (String)it.next() );
+            IContributionItem item = fileMenu.remove( action.getId() );
+            LOG.debug( "Removed item : " + item );
+            if( item != null ) {
+                item.update();
+            }
+        }
+        recentList.clear();
+
+        getConfiguration().addRecentDocument( file );
+        reloadRecentDocuments();
+    }
+
+    private void reloadRecentDocuments() {
+        for( Iterator it = getConfiguration().getRecentDocumentsIterator();
+                it.hasNext(); ) {
+            RecentDocumentAction action =
+                new RecentDocumentAction( (String) it.next() );
             action.setSnipPad( this );
-			fileMenu.insertAfter( "RECENT", action );
-			recentList.add( action );
-		}
-	}
-    
-    private class WikiViewerModificationListener
-    implements ModificationListener {
+            fileMenu.insertAfter( "RECENT", action );
+            recentList.add( action );
+        }
+    }
+
+    private class WikiViewerModificationListener implements
+            ModificationListener {
 
         /**
-         * @see org.outerrim.snippad.ui.swt.ModificationListener#modified(org.outerrim.snippad.ui.swt.ModifiedEvent)
+         * @see org.outerrim.snippad.ui.swt.ModificationListener#modified(
+         *      org.outerrim.snippad.ui.swt.ModifiedEvent)
          */
-        public void modified( ModifiedEvent me ) {
-            log.debug( "modifed()" );
-            WikiViewer source = (WikiViewer)me.getSource();
-            CTabItem tabItem = (CTabItem)tabItemMap.get( source );
+        public void modified( final ModifiedEvent me ) {
+            LOG.debug( "modifed()" );
+            WikiViewer source = (WikiViewer) me.getSource();
+            CTabItem tabItem = (CTabItem) tabItemMap.get( source );
             tabItem.setText( source.getTitle() );
-            
+
             if( me.isModified() ) {
                 ActionManager.getSaveWikiAction().setEnabled( true );
                 ActionManager.getSaveAsWikiAction().setEnabled( true );
@@ -309,29 +341,42 @@ public class SnipPad extends ApplicationWindow {
                 ActionManager.getSaveAsWikiAction().setEnabled( false );
             }
         }
-        
+
     }
-	
+
     /**
      * Retrieves the Configuration object containing the preferences.
+     *
      * @return Configuration of the application
      */
-    static public Configuration getConfiguration() { return config; }
-    
+    public static Configuration getConfiguration() {
+        return config;
+    }
+
     /**
      * Logs and displays an error.
-     * 
-     * @param message The message to display
-     * @param E Exception that caused the error
+     *
+     * @param message
+     *            The message to display
+     * @param e
+     *            Exception that caused the error
      */
-    static public void logError( String message, Exception E ) {
-        log.error( E.getMessage(), E );
-        Status status = new Status( IStatus.ERROR, "org.outerrim.snippad.SnipPad", IStatus.ERROR, E.getMessage(), E );
-        String title = "Error : " + E.getClass().toString();
-        ErrorDialog.openError( (Shell)null, title, null, status );                    
+    public static void logError( final String message, final Exception e ) {
+        LOG.error( e.getMessage(), e );
+        Status status = new Status(
+                IStatus.ERROR,
+                "org.outerrim.snippad.SnipPad",
+                IStatus.ERROR,
+                e.getMessage(),
+                e );
+        String title = "Error : " + e.getClass().toString();
+        ErrorDialog.openError( (Shell) null, title, null, status );
     }
-    
-    static public void main( String[] args ) {
+
+    /**
+     * @param args Arguments
+     */
+    public static void main( final String[] args ) {
         SnipPad sp = new SnipPad();
         sp.setBlockOnOpen( true );
         sp.open();

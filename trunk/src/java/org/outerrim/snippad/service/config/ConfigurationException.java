@@ -1,9 +1,9 @@
 /*
  * ConfigurationException.java
  * Created on Oct 8, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -30,31 +30,33 @@ public class ConfigurationException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     *
      */
     public ConfigurationException() {
         super();
     }
 
     /**
-     * @param message
+     * @param message Message
      */
-    public ConfigurationException( String message ) {
+    public ConfigurationException( final String message ) {
         super( message );
     }
 
     /**
-     * @param exception
+     * @param exception Cause
      */
-    public ConfigurationException( Throwable exception ) {
+    public ConfigurationException( final Throwable exception ) {
         super( exception );
     }
 
     /**
-     * @param message
-     * @param exception
+     * @param message Message
+     * @param exception Cause
      */
-    public ConfigurationException( String message, Throwable exception ) {
+    public ConfigurationException(
+            final String message,
+            final Throwable exception ) {
         super( message, exception );
     }
 }

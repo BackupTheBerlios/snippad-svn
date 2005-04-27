@@ -22,47 +22,62 @@ import org.outerrim.snippad.data.WikiWord;
  */
 public class WikiWordDragListener extends DragSourceAdapter {
     private StructuredViewer viewer;
-    
-    static private final Log log = LogFactory.getLog( WikiWordDragListener.class );
-    
+
+    private static final Log LOG = LogFactory.getLog(
+            WikiWordDragListener.class );
+
     /**
-     * 
+     * @param view View
      */
-    public WikiWordDragListener( StructuredViewer view ) {
+    public WikiWordDragListener( final StructuredViewer view ) {
         viewer = view;
     }
 
-    
-    public void dragFinished( DragSourceEvent event ) {
+    /**
+     * @see org.eclipse.swt.dnd.DragSourceListener#dragFinished(
+     *      org.eclipse.swt.dnd.DragSourceEvent)
+     */
+    public void dragFinished( final DragSourceEvent event ) {
         if( !event.doit ) {
             return;
         }
-        
-        if( event.detail == DND.DROP_MOVE ) {
-//            IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-//			for( Iterator it = selection.iterator(); it.hasNext(); ) {
-//				WikiWord word = (WikiWord)it.next();
-//                word.getParent().deleteWikiWord( word );
-//            }
 
-			viewer.refresh();
+        if( event.detail == DND.DROP_MOVE ) {
+            // IStructuredSelection selection =
+            // (IStructuredSelection)viewer.getSelection();
+            // for( Iterator it = selection.iterator(); it.hasNext(); ) {
+            // WikiWord word = (WikiWord)it.next();
+            // word.getParent().deleteWikiWord( word );
+            // }
+
+            viewer.refresh();
         }
     }
-    
-    public void dragSetData( DragSourceEvent event ) {
-        IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
-        WikiWord[] words = (WikiWord[])selection.toList().toArray( new WikiWord[selection.size()] );
-        if( WikiTransfer.getInstance().isSupportedType( event.dataType ) ) {
-            event.data = words;
-        }
-		
-		for( Iterator it = selection.iterator(); it.hasNext(); ) {
-			WikiWord word = (WikiWord)it.next();
+
+    /**
+     * @see org.eclipse.swt.dnd.DragSourceListener#dragSetData(
+     *      org.eclipse.swt.dnd.DragSourceEvent)
+     */
+    public void dragSetData( final DragSourceEvent event ) {
+        IStructuredSelection selection =
+            (IStructuredSelection) viewer.getSelection();
+//        WikiWord[] words = (WikiWord[])selection.toList().toArray(
+//              new WikiWord[selection.size()] );
+//        if( WikiTransfer.getInstance().isSupportedType( event.dataType ) ) {
+//            event.data = words;
+//        }
+
+        for( Iterator it = selection.iterator(); it.hasNext(); ) {
+            WikiWord word = (WikiWord) it.next();
             word.getParent().deleteWikiWord( word );
-        }		
+        }
     }
-    
-    public void dragStart( DragSourceEvent event ) {
+
+    /**
+     * @see org.eclipse.swt.dnd.DragSourceListener#dragStart(
+     *      org.eclipse.swt.dnd.DragSourceEvent)
+     */
+    public void dragStart( final DragSourceEvent event ) {
         event.doit = !viewer.getSelection().isEmpty();
     }
 }

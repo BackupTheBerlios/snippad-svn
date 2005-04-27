@@ -1,9 +1,9 @@
 /*
  * ImageUtil.java
  * Created on Sep 19, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -30,39 +30,50 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 
 /**
- * Utility classes for processing of images. Not currently used, as images aren't
- * loading correctly.
+ * Utility classes for processing of images. Not currently used, as images
+ * aren't loading correctly.
  * @author darkjedi
  */
-public class ImageUtil {
-    static private ImageRegistry registry;
-    static private Log log = LogFactory.getLog( ImageUtil.class );
-    
-    static public ImageRegistry getImageRegistry() {
+public final class ImageUtil {
+    private static ImageRegistry registry;
+    private static final Log LOG = LogFactory.getLog( ImageUtil.class );
+
+    /**
+     * @return Registry
+     */
+    public static ImageRegistry getImageRegistry() {
         if( registry == null ) {
             registry = new ImageRegistry();
-            URL save = registry.getClass().getResource( "/icons/save_edit.gif" );
+            URL save = registry.getClass().getResource(
+                    "/icons/save_edit.gif" );
             registry.put( "save",
                           ImageDescriptor.createFromURL( save ) );
-            URL saveas = registry.getClass().getResource( "/icons/saveas_edit.gif" );
+            URL saveas = registry.getClass().getResource(
+                    "/icons/saveas_edit.gif" );
             registry.put( "saveas",
                           ImageDescriptor.createFromURL( saveas ) );
-            URL newdoc = registry.getClass().getResource( "/icons/newfile_wiz.gif" );
+            URL newdoc = registry.getClass().getResource(
+                    "/icons/newfile_wiz.gif" );
             registry.put( "new",
                           ImageDescriptor.createFromURL( newdoc ) );
-            URL open = registry.getClass().getResource( "/icons/open.gif" );
+            URL open = registry.getClass().getResource(
+                    "/icons/open.gif" );
             registry.put( "open",
                           ImageDescriptor.createFromURL( open ) );
-            URL print = registry.getClass().getResource( "/icons/print_edit.gif" );
+            URL print = registry.getClass().getResource(
+                    "/icons/print_edit.gif" );
             registry.put( "print",
                           ImageDescriptor.createFromURL( print ) );
-            URL newword = registry.getClass().getResource( "/icons/import_log.gif" );
+            URL newword = registry.getClass().getResource(
+                    "/icons/import_log.gif" );
             registry.put( "newword",
                           ImageDescriptor.createFromURL( newword ) );
-            URL deleteword = registry.getClass().getResource( "/icons/remove.gif" );
+            URL deleteword = registry.getClass().getResource(
+                    "/icons/remove.gif" );
             registry.put( "deleteword",
                           ImageDescriptor.createFromURL( deleteword ) );
-            URL renameword = registry.getClass().getResource( "/icons/refresh.gif" );
+            URL renameword = registry.getClass().getResource(
+                    "/icons/refresh.gif" );
             registry.put( "renameword",
                           ImageDescriptor.createFromURL( renameword ) );
             URL up = registry.getClass().getResource( "/icons/up.gif" );
@@ -74,11 +85,13 @@ public class ImageUtil {
             URL back = registry.getClass().getResource( "/icons/back.gif" );
             registry.put( "back",
                           ImageDescriptor.createFromURL( back ) );
-            URL forward = registry.getClass().getResource( "/icons/forward.gif" );
+            URL forward = registry.getClass().getResource(
+                    "/icons/forward.gif" );
             registry.put( "forward",
                           ImageDescriptor.createFromURL( forward ) );
         }
-        
         return registry;
     }
+
+    private ImageUtil() { }
 }

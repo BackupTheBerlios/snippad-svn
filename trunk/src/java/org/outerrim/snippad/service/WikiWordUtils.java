@@ -1,9 +1,9 @@
 /*
  * WikiWordUtils.java
  * Created on Dec 22, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -29,17 +29,21 @@ import org.outerrim.snippad.data.WikiWord;
 /**
  * @author darkjedi
  */
-public class WikiWordUtils {
+public final class WikiWordUtils {
     /**
-     * Recursive method to see if a particular wikiword is available
-     * 
-     * @param parent Parent wiki word
-     * @param name WikiWord name to look for
+     * Recursive method to see if a particular wikiword is available.
+     *
+     * @param parent
+     *            Parent wiki word
+     * @param name
+     *            WikiWord name to look for
      * @return true if it exists, false otherwise
      */
-    static public WikiWord wordExists( WikiWord parent, String name ) {
+    public static WikiWord wordExists(
+            final WikiWord parent,
+            final String name ) {
         WikiWord word = null;
-        
+
         List<WikiWord> children = parent.getWikiWords();
         for( WikiWord child : children ) {
             // First check to see if the child is what we want
@@ -47,14 +51,16 @@ public class WikiWordUtils {
                 word = child;
                 break;
             }
-            
+
             // If not, check the child's children
             word = wordExists( child, name );
             if( word != null ) {
                 break;
             }
         }
-        
+
         return word;
     }
+
+    private WikiWordUtils() { }
 }

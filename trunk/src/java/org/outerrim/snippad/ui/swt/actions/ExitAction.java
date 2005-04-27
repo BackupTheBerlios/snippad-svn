@@ -1,9 +1,9 @@
 /*
  * ExitAction.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -27,6 +27,8 @@ package org.outerrim.snippad.ui.swt.actions;
  * @author darkjedi
  */
 public class ExitAction extends SnipPadBaseAction {
+    /**
+     */
     public ExitAction() {
         setText( "E&xit" );
         setToolTipText( "Exit SnipPad" );
@@ -34,7 +36,7 @@ public class ExitAction extends SnipPadBaseAction {
 
     /**
      * @see org.eclipse.jface.action.IAction#run()
-     */    
+     */
     public void run() {
         snippad.close();
     }

@@ -1,9 +1,9 @@
 /*
  * OpenAction.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -40,34 +40,49 @@ import org.outerrim.snippad.ui.swt.SnipPad;
  * @author darkjedi
  */
 public class OpenAction extends SnipPadBaseAction {
-    static private Log log = LogFactory.getLog( OpenAction.class );
-    
+    private static final Log LOG = LogFactory.getLog( OpenAction.class );
+
+    /**
+     */
     public OpenAction() {
         setText( "&Open@Ctrl+O" );
         setToolTipText( "Open a SnipPad file" );
-        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "open" ) );
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "open" ) );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
 
-        FileDialog dialog = new FileDialog( Display.getCurrent().getActiveShell(), SWT.OPEN );
-        dialog.setFilterNames( new String[] { "Snippad Files", "All Files (*,*)" } );
-        dialog.setFilterExtensions( new String[] { "*.snip", "*,*" } );
-        dialog.setFilterPath( SnipPad.getConfiguration().getDefaultSaveAsLocation() );
+        FileDialog dialog = new FileDialog(
+                Display.getCurrent().getActiveShell(),
+                SWT.OPEN );
+        dialog.setFilterNames( new String[] {
+                "Snippad Files",
+                "All Files (*,*)"
+        } );
+        dialog.setFilterExtensions( new String[] {
+                "*.snip",
+                "*,*"
+        } );
+        dialog.setFilterPath(
+                SnipPad.getConfiguration().getDefaultSaveAsLocation() );
         dialog.setFileName( "test.snip" );
         String filename = dialog.open();
         if( filename == null ) { return; }
-        
-        log.debug( "Opening : " + filename );
+
+        LOG.debug( "Opening : " + filename );
         try {
-            snippad.openWiki( (new XmlSerializer()).load( new FileInputStream( filename ) ), filename );
-        } catch( IOException E ) {
-            SnipPad.logError( E.getMessage(), E );
-        } catch( SerializeException E ) {
-            SnipPad.logError( E.getMessage(), E );
+            snippad.openWiki(
+                    (new XmlSerializer())
+                        .load( new FileInputStream( filename ) ),
+                    filename );
+        } catch( IOException e ) {
+            SnipPad.logError( e.getMessage(), e );
+        } catch( SerializeException e ) {
+            SnipPad.logError( e.getMessage(), e );
         }
         super.run();
     }

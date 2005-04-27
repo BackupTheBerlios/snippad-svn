@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.outerrim.snippad.ui.swt;
 
@@ -43,7 +43,7 @@ import org.radeox.engine.context.BaseRenderContext;
 public class WikiViewer extends Composite {
     private RenderContext wikiContext = new BaseRenderContext();
     private SnipPadRenderEngine wikiEngine = new SnipPadRenderEngine();
-    
+
     private TreeViewer tree;
     private Browser browser;
     private WikiEditor text;
@@ -54,20 +54,20 @@ public class WikiViewer extends Composite {
     private String loadedFilename;
     private boolean modified;
 
-    private List<ModificationListener> modificationListeners = new LinkedList<ModificationListener>();
-    
-    static private final Log log = LogFactory.getLog( WikiViewer.class );
-    
+    private List<ModificationListener> modificationListeners =
+        new LinkedList<ModificationListener>();
+
+    private static final Log LOG = LogFactory.getLog( WikiViewer.class );
+
     /**
-     * @param parent
-     * @param style
+     * @param parent Parent component
      */
-    public WikiViewer( Composite parent ) {
+    public WikiViewer( final Composite parent ) {
         super( parent, SWT.BORDER );
-        
+
         buildLayout();
-        
-        // Load wiki engine and render a blank String, which will pre-load 
+
+        // Load wiki engine and render a blank String, which will pre-load
         // the wiki engine
         wikiContext.setRenderEngine( wikiEngine );
         wikiEngine.render( "", wikiContext );
@@ -77,108 +77,130 @@ public class WikiViewer extends Composite {
     public WikiWord getSelectedWiki() { return selectedWikiWord; }
     public String getLoadedFilename() { return loadedFilename; }
 
+    /**
+     */
     public void print() {
         browser.execute( "print()" );
     }
-    
+
     /**
      * Sets the filename of the loaded wiki.
-     * 
+     *
      * @param f The filename
      */
-    public void setLoadedFilename( String f ) { 
+    public void setLoadedFilename( final String f ) {
         loadedFilename = f;
         setModified( false );
     }
 
     /**
      * Programmatically selects a wikiword.
-     * 
+     *
      * @param word The word to select
      */
-    public void setSelectedWiki( WikiWord word ) {
+    public void setSelectedWiki( final WikiWord word ) {
         tree.setSelection( new StructuredSelection( word ) );
     }
-    
+
     /**
      * Sets the currently loaded wiki.
-     * 
+     *
      * @param wiki The root wikiword
      * @param filename Filename of this document
      */
-    public void setWiki( WikiWord wiki, String filename ) {
+    public void setWiki( final WikiWord wiki, final String filename ) {
 //        updateRecentDocuments( filename );
-        
+
         setLoadedFilename( filename );
         clear();
         rootWiki = wiki;
-        
+
         tree.setInput( rootWiki );
         wikiEngine.setDocument( rootWiki );
     }
-    
+
     public boolean isModified() { return modified; }
-    public void setModified( boolean mod ) { 
+
+    /**
+     * @param mod modified or not
+     */
+    public void setModified( final boolean mod ) {
         modified = mod;
         notifyModificationListeners();
     }
-    
+
+    /**
+     * @return The title
+     */
     public String getTitle() {
         int index = loadedFilename.lastIndexOf( File.separator );
-        String file = loadedFilename.substring( index + 1, loadedFilename.length() );
+        String file = loadedFilename.substring(
+                index + 1, loadedFilename.length() );
 
         return file + (modified ? "*" : "");
     }
-    
+
+    /**
+     */
     public void refreshTree() {
         tree.refresh();
     }
-    
+
+    /**
+     * @see org.eclipse.swt.widgets.Widget#dispose()
+     */
     public void dispose() {
-        log.debug( "Disposing" );
+        LOG.debug( "Disposing" );
         browser.dispose();
         super.dispose();
     }
-    
-    public void addModificationListener( ModificationListener listener ) {
+
+    /**
+     * @param listener Modification listener to add
+     */
+    public void addModificationListener( final ModificationListener listener ) {
         modificationListeners.add( listener );
     }
-    
-    public void removeModificationListener( ModificationListener listener ) {
+
+    /**
+     * @param listener listener to remove
+     */
+    public void removeModificationListener(
+            final ModificationListener listener ) {
         modificationListeners.remove( listener );
     }
-    
+
     private void notifyModificationListeners() {
         ModifiedEvent me = new ModifiedEvent( this, modified );
         for( ModificationListener ml : modificationListeners ) {
             ml.modified( me );
         }
     }
-    
+
     private void buildLayout() {
         GridLayout layout = new GridLayout();
         layout.numColumns = 1;
         setLayout( layout );
-        
+
         SashForm sashForm = new SashForm( this, SWT.HORIZONTAL );
-        GridData sashData = new GridData( 
+        GridData sashData = new GridData(
                 GridData.FILL,
                 GridData.FILL,
                 true,
                 true );
         sashForm.setLayoutData( sashData );
-        
+
         tree = new TreeViewer( sashForm );
         tree.setContentProvider( new WikiWordContentProvider() );
-        
+
         tree.addSelectionChangedListener( new ISelectionChangedListener() {
-            public void selectionChanged( SelectionChangedEvent event ) {
+            public void selectionChanged( final SelectionChangedEvent event ) {
                 handleTreeSelectionChanged( event );
             }
         });
-        
+
         tree.getTree().setMenu( createTreePopupMenu() );
-        
+
         editorSash = new SashForm( sashForm, SWT.VERTICAL );
 
         browser = new Browser( editorSash, SWT.BORDER );
@@ -186,54 +208,65 @@ public class WikiViewer extends Composite {
         text = new WikiEditor( editorSash );
         text.setEnabled( false );
         text.addSaveListener( new SelectionListener() {
-            public void widgetSelected( SelectionEvent event ) {
+            public void widgetSelected( final SelectionEvent event ) {
                 handleSaveWikiWord();
             }
-            
-            public void widgetDefaultSelected( SelectionEvent event ) {
+
+            public void widgetDefaultSelected( final SelectionEvent event ) {
                 handleSaveWikiWord();
             }
         });
-        
+
         showEditor( SnipPad.getConfiguration().showEditor() );
-        
-        sashForm.setWeights( new int[] { 20, 80 } );
-        editorSash.setWeights( new int[] { 60, 40 } );
-        
+
+        sashForm.setWeights( new int[] {
+                20,
+                80
+        } );
+        editorSash.setWeights( new int[] {
+                60,
+                40
+        } );
+
         // Setup drag and drop
 //        int ops = DND.DROP_MOVE;
 //        Transfer[] transfers = new Transfer[] { WikiTransfer.getInstance() };
-//        tree.addDragSupport( ops, transfers, new WikiWordDragListener( tree ) );
-//        tree.addDropSupport( ops, transfers, new WikiWordTreeDropAdapter( tree ) );
+//        tree.addDragSupport(
+//              ops, transfers, new WikiWordDragListener( tree ) );
+//        tree.addDropSupport(
+//              ops, transfers, new WikiWordTreeDropAdapter( tree ) );
     }
-    
+
     /**
      * Handles events for the wikiword tree.
-     * 
+     *
      * @param event The event to handle
      */
-    private void handleTreeSelectionChanged( SelectionChangedEvent event ) {
-        IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+    private void handleTreeSelectionChanged(
+            final SelectionChangedEvent event ) {
+        IStructuredSelection selection =
+            (IStructuredSelection)event.getSelection();
         WikiWord newWord = (WikiWord)selection.getFirstElement();
 
         // If the new and old are the same, do nothing
         if( selectedWikiWord == newWord ) {
             return;
         }
-        
+
         // Check if the last word's text is still modified, and warn if it is
         if( text.isModified() ) {
-            MessageBox message = new MessageBox( getShell(), 
+            MessageBox message = new MessageBox( getShell(),
                     SWT.ICON_QUESTION | SWT.YES | SWT.NO );
             message.setMessage( "Wiki text not saved, lose edits?" );
             int confirm = message.open();
-            if( confirm == SWT.NO ) { 
-                IStructuredSelection select = new StructuredSelection( selectedWikiWord );
+            if( confirm == SWT.NO ) {
+                IStructuredSelection select = new StructuredSelection(
+                        selectedWikiWord );
                 tree.setSelection( select, true );
                 return;
             }
         }
-                
+
         selectedWikiWord = newWord;
         if( selectedWikiWord == null ) {    // No selection, clear everything
             clear();
@@ -243,7 +276,7 @@ public class WikiViewer extends Composite {
             ActionManager.getMoveDownAction().setEnabled( false );
             ActionManager.getMoveBackAction().setEnabled( false );
             ActionManager.getMoveForwardAction().setEnabled( false );
-            return; 
+            return;
         } else {
             ActionManager.getDeleteWikiWordAction().setEnabled( true );
             ActionManager.getRenameWordAction().setEnabled( true );
@@ -252,14 +285,14 @@ public class WikiViewer extends Composite {
             ActionManager.getMoveBackAction().setEnabled( true );
             ActionManager.getMoveForwardAction().setEnabled( true );
         }
-        
+
         if( selectedWikiWord.getHtmlText() == null ) {
             updateWikiHtml( selectedWikiWord );
         }
-        
+
         text.setEnabled( true );
         text.setText( selectedWikiWord.getWikiText() );
-        updateBrowser( selectedWikiWord.getHtmlText() );        
+        updateBrowser( selectedWikiWord.getHtmlText() );
     }
 
     /**
@@ -271,7 +304,7 @@ public class WikiViewer extends Composite {
         updateBrowser( selectedWikiWord.getHtmlText() );
         setModified( true );
     }
-    
+
     /**
      * Creates the popup menu for the wiki tree.
      * @return Menu containing the entries
@@ -289,41 +322,42 @@ public class WikiViewer extends Composite {
 
         return popupMenu.createContextMenu( tree.getTree() );
     }
-    
+
     /**
-     * Sets the HTML in the browser
+     * Sets the HTML in the browser.
      * @param html The HTML
      */
-    private void updateBrowser( String html ) {
+    private void updateBrowser( final String html ) {
         browser.setText( selectedWikiWord.getHtmlText() );
-        browser.update(); 
+        browser.update();
     }
-    
+
     /**
-     * Updates the HTML in the wikiword of the text has been changed
+     * Updates the HTML in the wikiword of the text has been changed.
      * @param wiki The wiki to update
      */
-    private void updateWikiHtml( WikiWord wiki ) {
+    private void updateWikiHtml( final WikiWord wiki ) {
         String html = wikiEngine.render( wiki.getWikiText(), wikiContext );
         wiki.setHtmlText( html, SnipPad.getConfiguration().getCssLocation() );
-        
+
         // Write this to a test file so it may be browsed
         try {
             File testFile = new File( "test.html" );
-            log.debug( "Writing test html file : " + testFile.getAbsoluteFile() );
+            LOG.debug(
+                    "Writing test html file : " + testFile.getAbsoluteFile() );
             FileWriter writer = new FileWriter( testFile );
             writer.write( wiki.getHtmlText() );
             writer.close();
-        } catch( IOException E ) {
-            log.error( E );
+        } catch( IOException e ) {
+            LOG.error( e );
         }
     }
-    
+
     /**
      * Resets the application to a clean state.
      */
     private void clear() {
-        log.debug( "Clearing" );
+        LOG.debug( "Clearing" );
         text.setText( "" );
         text.setEnabled( false );
         browser.setText( "<html><body></body></html>" );
@@ -332,42 +366,46 @@ public class WikiViewer extends Composite {
 
     /**
      * Shows/Hides the editor component.
-     * 
+     *
      * @param show Shows if true, hides if false
      */
-    public void showEditor( boolean show ) {
+    public void showEditor( final boolean show ) {
         if( show ) {
             editorSash.setMaximizedControl( null );
         } else {
             editorSash.setMaximizedControl( browser );
         }
     }
-    
-    private class WikiLocationListener 
+
+    private class WikiLocationListener
     implements LocationListener {
         /**
-         * @see org.eclipse.swt.browser.LocationListener#changed(org.eclipse.swt.browser.LocationEvent)
+         * @see org.eclipse.swt.browser.LocationListener#changed(
+         * org.eclipse.swt.browser.LocationEvent)
          */
-        public void changed( LocationEvent event ) {
+        public void changed( final LocationEvent event ) {
             // TODO Implement Back/Forward ability
         }
-        
+
         /**
-         * @see org.eclipse.swt.browser.LocationListener#changing(org.eclipse.swt.browser.LocationEvent)
+         * @see org.eclipse.swt.browser.LocationListener#changing(
+         * org.eclipse.swt.browser.LocationEvent)
          */
-        public void changing( LocationEvent event ) {
+        public void changing( final LocationEvent event ) {
             // Check to see if we are a wiki:// URL
             if( event.location.startsWith( "wiki" ) ) {
-                log.debug( "Going to location : " + event.location );
+                LOG.debug( "Going to location : " + event.location );
                 String location = event.location.replaceAll( "wiki://", "" );
                 WikiWord link = WikiWordUtils.wordExists( rootWiki, location );
                 if( link == null ) {
-                    log.error( "Linked word does not exist" );
+                    LOG.error( "Linked word does not exist" );
                 }
-                IStructuredSelection selection = new StructuredSelection( link );
+                IStructuredSelection selection =
+                    new StructuredSelection( link );
                 tree.setSelection( selection, true );
-                
-                // Set doit to false so the browser itself doesn't try to navigate
+
+                // Set doit to false so the browser itself doesn't try to
+                // navigate
                 event.doit = false;
             }
         }

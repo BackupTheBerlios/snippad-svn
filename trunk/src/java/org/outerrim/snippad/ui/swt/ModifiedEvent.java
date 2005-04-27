@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.outerrim.snippad.ui.swt;
 
@@ -11,15 +11,16 @@ public class ModifiedEvent {
 
     private Object source;
     private boolean modified = false;
-    
+
     /**
-     * 
+     * @param s Source object
+     * @param mod Modifed
      */
-    public ModifiedEvent( Object source, boolean modified ) {
-        this.source = source;
-        this.modified = modified;
+    public ModifiedEvent( final Object s, final boolean mod ) {
+        this.source = s;
+        this.modified = mod;
     }
-    
+
     public boolean isModified() { return modified; }
     public Object getSource() { return source; }
 }

@@ -1,9 +1,9 @@
 /*
  * SaveWikiAction.java
  * Created on Sep 19, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -35,42 +35,47 @@ import org.outerrim.snippad.ui.swt.WikiViewer;
 
 /**
  * Saves the snippad document, defering to Save As if no filename is known.
+ *
  * @author darkjedi
  */
 public class SaveWikiAction extends SnipPadBaseAction {
     private Action actionSaveAs;
-    
+
     /**
-     * @param w The parent window
-     * @param saveAs The Action to use as the SaveAs action if this is a new file
+     * @param saveAs
+     *            The Action to use as the SaveAs action if this is a new file
      */
-    public SaveWikiAction( Action saveAs ) {
+    public SaveWikiAction( final Action saveAs ) {
         actionSaveAs = saveAs;
         setText( "&Save@Ctrl+S" );
         setToolTipText( "Save the Wiki" );
-		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "save" ) );
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "save" ) );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
         WikiViewer viewer = snippad.getCurrentWikiViewer();
         String filename = viewer.getLoadedFilename();
-        
-        if( filename == null ) {	// A new Wiki, not previously loaded, do SaveAs
+
+        //      A new Wiki, not previously loaded, do SaveAs
+        if( filename == null ) {
             actionSaveAs.run();
             return;
         }
-        
+
         try {
-	        WikiWord root = viewer.getRootWiki();
-	        (new XmlSerializer()).save( root, new FileOutputStream( filename ) );
-	        viewer.setModified( false );
-        } catch( SerializeException E ) {
-            SnipPad.logError( E.getMessage(), E );
-        } catch( FileNotFoundException E ) {
-            SnipPad.logError( E.getMessage(), E );
+            WikiWord root = viewer.getRootWiki();
+            (new XmlSerializer()).save(
+                    root,
+                    new FileOutputStream( filename ) );
+            viewer.setModified( false );
+        } catch( SerializeException e ) {
+            SnipPad.logError( e.getMessage(), e );
+        } catch( FileNotFoundException e ) {
+            SnipPad.logError( e.getMessage(), e );
         }
     }
 }

@@ -6,31 +6,40 @@ import org.outerrim.snippad.data.WikiWord;
 import org.outerrim.snippad.service.ImageUtil;
 import org.outerrim.snippad.ui.swt.WikiViewer;
 
+/**
+ * @author <a href="mailto:sithlord@berlios.de">Michael Osterlie</a>
+ */
 public class MoveWordUpAction extends SnipPadBaseAction {
-	public MoveWordUpAction() {
+    /**
+     */
+    public MoveWordUpAction() {
         setText( "&Move Up" );
         setToolTipText( "Move word down one spot" );
-        setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "up" ) );
-	}
-	
-	public void run() {
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "up" ) );
+    }
+
+    /**
+     * @see org.eclipse.jface.action.IAction#run()
+     */
+    public void run() {
         WikiViewer viewer = snippad.getCurrentWikiViewer();
-		WikiWord selected = viewer.getSelectedWiki();
-		if( selected == null ) {
-			return;
-		}
-		
-		WikiWord parent = selected.getParent();
-		List<WikiWord> words = parent.getWikiWords();
-		int index = words.indexOf( selected );
-		
-		if( index == 0 ) {
-			return;
-		}
-		
-		words.remove( selected );
-		words.add( --index, selected );
-		viewer.refreshTree();
-		viewer.setModified( true );
-	}
+        WikiWord selected = viewer.getSelectedWiki();
+        if( selected == null ) {
+            return;
+        }
+
+        WikiWord parent = selected.getParent();
+        List<WikiWord> words = parent.getWikiWords();
+        int index = words.indexOf( selected );
+
+        if( index == 0 ) {
+            return;
+        }
+
+        words.remove( selected );
+        words.add( --index, selected );
+        viewer.refreshTree();
+        viewer.setModified( true );
+    }
 }

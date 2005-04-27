@@ -1,9 +1,9 @@
 /*
  * SerializeException.java
  * Created on Sep 2, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of ack.
  *
  * ack is free software; you can redistribute it and/or modify
@@ -30,31 +30,31 @@ public class SerializeException extends Exception {
     private static final long serialVersionUID = -3440630951756453850L;
 
     /**
-     * 
+     *
      */
     public SerializeException() {
         super();
     }
-    
+
     /**
-     * @param message
+     * @param message Message
      */
-    public SerializeException( String message ) {
+    public SerializeException( final String message ) {
         super( message );
     }
-    
+
     /**
-     * @param message
-     * @param E
+     * @param message Message
+     * @param e Exception that caused this exception
      */
-    public SerializeException( String message, Throwable E ) {
-        super( message, E );
+    public SerializeException( final String message, final Throwable e ) {
+        super( message, e );
     }
-    
+
     /**
-     * @param E
+     * @param e Exception that caused this exception
      */
-    public SerializeException( Throwable E ) {
-        super( E );
+    public SerializeException( final Throwable e ) {
+        super( e );
     }
 }

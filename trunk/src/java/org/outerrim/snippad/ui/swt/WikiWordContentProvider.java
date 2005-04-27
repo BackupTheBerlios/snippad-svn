@@ -1,9 +1,9 @@
 /*
  * WikiWordContentProvider.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -34,41 +34,50 @@ public class WikiWordContentProvider
 implements ITreeContentProvider {
 
     /**
-     * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(
+     *      java.lang.Object)
      */
-    public Object[] getChildren( Object element ) {
+    public Object[] getChildren( final Object element ) {
         Object[] words = ((WikiWord)element).getWikiWords().toArray();
         return words;
     }
 
     /**
-     * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(
+     *      java.lang.Object)
      */
-    public Object getParent( Object element ) {
+    public Object getParent( final Object element ) {
         return ((WikiWord)element).getParent();
     }
 
     /**
-     * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(java.lang.Object)
+     * @see org.eclipse.jface.viewers.ITreeContentProvider#hasChildren(
+     *      java.lang.Object)
      */
-    public boolean hasChildren( Object element ) {
+    public boolean hasChildren( final Object element ) {
         return getChildren( element ).length > 0;
     }
 
     /**
-     * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+     * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(
+     *      java.lang.Object)
      */
-    public Object[] getElements( Object element ) {
+    public Object[] getElements( final Object element ) {
         return getChildren( element );
     }
 
     /**
      * @see org.eclipse.jface.viewers.IContentProvider#dispose()
      */
-    public void dispose() {}
+    public void dispose() { }
 
     /**
-     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(
+     *      org.eclipse.jface.viewers.Viewer, java.lang.Object,
+     *      java.lang.Object)
      */
-    public void inputChanged( Viewer arg0, Object arg1, Object arg2 ) {}
+    public void inputChanged(
+            final Viewer arg0,
+            final Object arg1,
+            final Object arg2 ) { }
 }

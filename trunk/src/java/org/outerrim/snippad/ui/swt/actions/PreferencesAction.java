@@ -1,9 +1,9 @@
 /*
  * PreferencesAction.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -31,17 +31,19 @@ import org.outerrim.snippad.ui.swt.dialog.preference.PreferenceManager;
  * @author darkjedi
  */
 public class PreferencesAction extends SnipPadBaseAction {
+    /**
+     */
     public PreferencesAction() {
         setText( "&Preferences" );
         setToolTipText( "Show wreferences dialog" );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
         PreferenceDialog prefDialog = new PreferenceDialog(
-                Display.getCurrent().getActiveShell(), 
+                Display.getCurrent().getActiveShell(),
                 new PreferenceManager() );
         prefDialog.open();
     }

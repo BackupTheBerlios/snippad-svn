@@ -1,9 +1,9 @@
 /*
  * NewWikiAction.java
  * Created on Sep 19, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -30,12 +30,15 @@ import org.outerrim.snippad.service.ImageUtil;
  * @author darkjedi
  */
 public class NewWikiAction extends SnipPadBaseAction {
+    /**
+     */
     public NewWikiAction() {
         setText( "&New@Ctrl+N" );
         setToolTipText( "Create a new Wiki" );
-		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "new" ) );
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "new" ) );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */

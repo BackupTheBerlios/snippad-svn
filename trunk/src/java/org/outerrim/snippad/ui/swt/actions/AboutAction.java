@@ -1,9 +1,9 @@
 /*
  * AboutAction.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -28,19 +28,25 @@ import org.outerrim.snippad.SnipPadConstants;
 
 /**
  * Action to display an about dialog.
+ *
  * @author darkjedi
  */
 public class AboutAction extends SnipPadBaseAction {
+    /**
+     */
     public AboutAction() {
         setText( "&About" );
         setToolTipText( "About SnipPad" );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */
     public void run() {
         String message = "SnipPad v" + SnipPadConstants.VERSION;
-        MessageDialog.openInformation( Display.getCurrent().getActiveShell(), "About SnipPad", message );
+        MessageDialog.openInformation(
+                Display.getCurrent().getActiveShell(),
+                "About SnipPad",
+                message );
     }
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.outerrim.snippad.ui.swt.actions;
 
@@ -9,40 +9,45 @@ import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
  * @author <a href="mailto:sithlord@berlios.de">Michael Osterlie</a>
- *
  */
 public class SnipPadBaseAction extends Action {
-    protected SnipPad snippad;
-    
     /**
-     * 
+     */
+    protected SnipPad snippad;
+
+    /**
      */
     public SnipPadBaseAction() {
         super();
     }
 
     /**
-     * @param arg0
+     * @param name Display name
      */
-    public SnipPadBaseAction( String arg0 ) {
-        super( arg0 );
+    public SnipPadBaseAction( final String name ) {
+        super( name );
     }
 
     /**
-     * @param arg0
-     * @param arg1
+     * @param name Display name
+     * @param image Image
      */
-    public SnipPadBaseAction( String arg0, ImageDescriptor arg1 ) {
-        super( arg0, arg1 );
+    public SnipPadBaseAction( final String name, final ImageDescriptor image ) {
+        super( name, image );
     }
 
     /**
-     * @param arg0
-     * @param arg1
+     * @param name Display name
+     * @param arg1 int
      */
-    public SnipPadBaseAction( String arg0, int arg1 ) {
-        super( arg0, arg1 );
+    public SnipPadBaseAction( final String name, final int arg1 ) {
+        super( name, arg1 );
     }
 
-    public void setSnipPad( SnipPad sp ) { snippad = sp; }
+    /**
+     * @param sp SnipPad instance
+     */
+    public void setSnipPad( final SnipPad sp ) {
+        snippad = sp;
+    }
 }

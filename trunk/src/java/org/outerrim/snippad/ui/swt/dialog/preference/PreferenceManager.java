@@ -1,9 +1,9 @@
 /*
  * PreferenceManager.java
  * Created on Nov 23, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -25,14 +25,16 @@ package org.outerrim.snippad.ui.swt.dialog.preference;
 /**
  * @author darkjedi
  */
-public class PreferenceManager 
-		extends org.eclipse.jface.preference.PreferenceManager {
-    
+public class PreferenceManager
+        extends org.eclipse.jface.preference.PreferenceManager {
+
     private GeneralPreferencePage browserPage = new GeneralPreferencePage();
-    
+
+    /**
+     */
     public PreferenceManager() {
         super();
-        
+
         addToRoot( browserPage.getNode() );
     }
 }

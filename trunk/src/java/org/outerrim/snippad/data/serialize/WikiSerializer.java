@@ -1,9 +1,9 @@
 /*
  * WikiSerializer.java
  * Created on Sep 17, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -34,19 +34,19 @@ import org.outerrim.snippad.data.WikiWord;
 public interface WikiSerializer {
     /**
      * Saves the document.
-     * 
+     *
      * @param wiki Root wikiword
      * @param output Where to save the document to
      * @throws SerializeException If an error occurred while saving
      */
-    public void save( WikiWord wiki, OutputStream output ) throws SerializeException;
-    
+    void save( WikiWord wiki, OutputStream output ) throws SerializeException;
+
     /**
-     * Loads a document
-     * 
+     * Loads a document.
+     *
      * @param input Where the document is stored.
      * @return The root wikiword containing the document.
      * @throws SerializeException If an error occurred while loading
      */
-    public WikiWord load( InputStream input ) throws SerializeException;
+    WikiWord load( InputStream input ) throws SerializeException;
 }

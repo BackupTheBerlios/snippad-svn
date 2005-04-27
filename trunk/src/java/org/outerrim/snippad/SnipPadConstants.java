@@ -1,9 +1,9 @@
 /*
  * SnipPadConstants.java
  * Created on Dec 1, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -26,9 +26,11 @@ package org.outerrim.snippad;
  * @author darkjedi
  */
 public class SnipPadConstants {
-    static public final String VERSION = "0.3";
-    static public final String PREFERENCE_FILENAME = 
-        	System.getProperty( "user.home" ) +
-        	System.getProperty( "file.separator" ) +
-        	".snippad";
+    /** */
+    public static final String VERSION = "0.3";
+
+    /** */
+    public static final String PREFERENCE_FILENAME =
+        System.getProperty( "user.home" ) +
+        System.getProperty( "file.separator" ) + ".snippad";
 }

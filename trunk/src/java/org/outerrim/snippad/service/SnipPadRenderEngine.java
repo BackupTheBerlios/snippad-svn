@@ -1,9 +1,9 @@
 /*
  * SnipPadRenderEngine.java
  * Created on Dec 22, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -29,22 +29,22 @@ import org.radeox.engine.BaseRenderEngine;
 /**
  * @author darkjedi
  */
-public class SnipPadRenderEngine extends BaseRenderEngine
-implements WikiRenderEngine {
+public class SnipPadRenderEngine extends BaseRenderEngine implements
+        WikiRenderEngine {
     private WikiWord document;
-    
-    public void setDocument( WikiWord word ) {
+
+    public void setDocument( final WikiWord word ) {
         document = word;
     }
-    
+
     /**
      * @see org.radeox.api.engine.WikiRenderEngine#exists(java.lang.String)
      */
-    public boolean exists( String name ) {
+    public boolean exists( final String name ) {
         if( document != null ) {
             return WikiWordUtils.wordExists( document, name ) != null;
         }
-        
+
         return false;
     }
 
@@ -56,28 +56,39 @@ implements WikiRenderEngine {
     }
 
     /**
-     * @see org.radeox.api.engine.WikiRenderEngine#appendLink(java.lang.StringBuffer, java.lang.String, java.lang.String, java.lang.String)
+     * @see org.radeox.api.engine.WikiRenderEngine#appendLink(
+     *      java.lang.StringBuffer, java.lang.String, java.lang.String,
+     *       java.lang.String)
      */
-    public void appendLink( StringBuffer buffer,
-                            String name,
-                            String view,
-                            String anchor) {
-        buffer.append( "<a href=\"wiki://" + name + "#" + anchor + "\">" + view + "</a>" );
+    public void appendLink(
+            final StringBuffer buffer,
+            final String name,
+            final String view,
+            final String anchor ) {
+        buffer.append(
+                "<a href=\"wiki://" + name + "#" + anchor + "\">" +
+                view + "</a>" );
     }
 
     /**
-     * @see org.radeox.api.engine.WikiRenderEngine#appendLink(java.lang.StringBuffer, java.lang.String, java.lang.String)
+     * @see org.radeox.api.engine.WikiRenderEngine#appendLink(
+     *      java.lang.StringBuffer, java.lang.String, java.lang.String)
      */
-    public void appendLink( StringBuffer buffer, String name, String view ) {
+    public void appendLink(
+            final StringBuffer buffer,
+            final String name,
+            final String view ) {
         buffer.append( "<a href=\"wiki://" + name + "\">" + view + "</a>" );
     }
 
     /**
-     * @see org.radeox.api.engine.WikiRenderEngine#appendCreateLink(java.lang.StringBuffer, java.lang.String, java.lang.String)
+     * @see org.radeox.api.engine.WikiRenderEngine#appendCreateLink(
+     *      java.lang.StringBuffer, java.lang.String, java.lang.String)
      */
-    public void appendCreateLink( StringBuffer buffer, 
-                                  String name, 
-                                  String view ) {
+    public void appendCreateLink(
+            final StringBuffer buffer,
+            final String name,
+            final String view ) {
         buffer.append( "[create " + view + "]" );
     }
 

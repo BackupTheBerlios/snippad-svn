@@ -1,9 +1,9 @@
 /*
  * ShowEditorAction.java
  * Created on Sep 18, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -26,15 +26,18 @@ import org.outerrim.snippad.ui.swt.SnipPad;
 
 /**
  * Toggles the showing of the wiki text editor.
+ *
  * @author darkjedi
  */
 public class ShowEditorAction extends SnipPadBaseAction {
+    /**
+     */
     public ShowEditorAction() {
-        setText( "Show &Editor@Ctrl+E");
+        setText( "Show &Editor@Ctrl+E" );
         setToolTipText( "Show the Wiki editor" );
         setChecked( SnipPad.getConfiguration().showEditor() );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */

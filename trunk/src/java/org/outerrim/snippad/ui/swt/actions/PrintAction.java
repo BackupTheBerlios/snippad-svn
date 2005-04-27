@@ -1,9 +1,9 @@
 /*
  * PrintAction.java
  * Created on Dec 21, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -31,13 +31,16 @@ import org.outerrim.snippad.ui.swt.WikiViewer;
  */
 public class PrintAction extends SnipPadBaseAction {
     private Browser browser;
-    
+
+    /**
+     */
     public PrintAction() {
         setText( "&Print@Ctrl+P" );
         setToolTipText( "Print current Snip" );
-		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "print" ) );
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "print" ) );
     }
-    
+
     /**
      * @see org.eclipse.jface.action.IAction#run()
      */

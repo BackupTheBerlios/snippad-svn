@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.outerrim.snippad.ui.swt;
 
@@ -25,23 +25,23 @@ import org.outerrim.snippad.ui.swt.actions.ShowEditorAction;
  * @author <a href="mailto:sithlord@berlios.de">Michael Osterlie</a>
  *
  */
-public class ActionManager {
-    static private NewWikiAction actionNew;
-    static private OpenAction actionOpen;
-    static private SaveWikiAction actionSaveWiki;
-    static private SaveAsWikiAction actionSaveAsWiki;
-    static private PrintAction actionPrint;
-    static private ExitAction actionExit;
-    static private ShowEditorAction actionEdit;
-    static private NewWikiWordAction actionNewWikiWord;
-    static private DeleteWikiWordAction actionDeleteWikiWord;
-    static private RenameWordAction actionRenameWord;
-    static private MoveWordUpAction actionMoveUp;
-    static private MoveWordDownAction actionMoveDown;
-    static private MoveWordBackAction actionMoveBack;
-    static private MoveWordForwardAction actionMoveForward;
-    static private PreferencesAction actionPreferences;
-    static private AboutAction actionAbout;
+public final class ActionManager {
+    private static NewWikiAction actionNew;
+    private static OpenAction actionOpen;
+    private static SaveWikiAction actionSaveWiki;
+    private static SaveAsWikiAction actionSaveAsWiki;
+    private static PrintAction actionPrint;
+    private static ExitAction actionExit;
+    private static ShowEditorAction actionEdit;
+    private static NewWikiWordAction actionNewWikiWord;
+    private static DeleteWikiWordAction actionDeleteWikiWord;
+    private static RenameWordAction actionRenameWord;
+    private static MoveWordUpAction actionMoveUp;
+    private static MoveWordDownAction actionMoveDown;
+    private static MoveWordBackAction actionMoveBack;
+    private static MoveWordForwardAction actionMoveForward;
+    private static PreferencesAction actionPreferences;
+    private static AboutAction actionAbout;
 
     static {
         actionNew = new NewWikiAction();
@@ -60,7 +60,7 @@ public class ActionManager {
         actionMoveForward = new MoveWordForwardAction();
         actionPreferences = new PreferencesAction();
         actionAbout = new AboutAction();
-        
+
         actionSaveWiki.setEnabled( false );
         actionSaveAsWiki.setEnabled( false );
         actionPrint.setEnabled( false );
@@ -70,27 +70,32 @@ public class ActionManager {
         actionMoveUp.setEnabled( false );
         actionMoveDown.setEnabled( false );
         actionMoveBack.setEnabled( false );
-        actionMoveForward.setEnabled( false );        
+        actionMoveForward.setEnabled( false );
     }
-    
-    static public IAction getNewWikiAction() { return actionNew; }
-    static public IAction getOpenAction() { return actionOpen; }
-    static public IAction getSaveAsWikiAction() { return actionSaveAsWiki; }
-    static public IAction getSaveWikiAction() { return actionSaveWiki; }
-    static public IAction getPrintAction() { return actionPrint; }
-    static public IAction getExitAction() { return actionExit; }
-    static public IAction getEditAction() { return actionEdit; }
-    static public IAction getNewWikiWordAction() { return actionNewWikiWord; }
-    static public IAction getDeleteWikiWordAction() { return actionDeleteWikiWord; }
-    static public IAction getRenameWordAction() { return actionRenameWord; }
-    static public IAction getMoveUpAction() { return actionMoveUp; }
-    static public IAction getMoveDownAction() { return actionMoveDown; }
-    static public IAction getMoveBackAction() { return actionMoveBack; }
-    static public IAction getMoveForwardAction() { return actionMoveForward; }
-    static public IAction getPreferencesAction() { return actionPreferences; }
-    static public IAction getAboutAction() { return actionAbout; }
-    
-    static public void registerSnipPad( SnipPad sp ) {
+
+    public static IAction getNewWikiAction() { return actionNew; }
+    public static IAction getOpenAction() { return actionOpen; }
+    public static IAction getSaveAsWikiAction() { return actionSaveAsWiki; }
+    public static IAction getSaveWikiAction() { return actionSaveWiki; }
+    public static IAction getPrintAction() { return actionPrint; }
+    public static IAction getExitAction() { return actionExit; }
+    public static IAction getEditAction() { return actionEdit; }
+    public static IAction getNewWikiWordAction() { return actionNewWikiWord; }
+    public static IAction getDeleteWikiWordAction() {
+        return actionDeleteWikiWord;
+    }
+    public static IAction getRenameWordAction() { return actionRenameWord; }
+    public static IAction getMoveUpAction() { return actionMoveUp; }
+    public static IAction getMoveDownAction() { return actionMoveDown; }
+    public static IAction getMoveBackAction() { return actionMoveBack; }
+    public static IAction getMoveForwardAction() { return actionMoveForward; }
+    public static IAction getPreferencesAction() { return actionPreferences; }
+    public static IAction getAboutAction() { return actionAbout; }
+
+    /**
+     * @param sp SnipPad instance
+     */
+    public static void registerSnipPad( final SnipPad sp ) {
         actionOpen.setSnipPad( sp );
         actionExit.setSnipPad( sp );
         actionSaveWiki.setSnipPad( sp );
@@ -104,4 +109,6 @@ public class ActionManager {
         actionNew.setSnipPad( sp );
         actionRenameWord.setSnipPad( sp );
     }
+
+    private ActionManager() { }
 }

@@ -1,9 +1,9 @@
 /*
  * DeleteWikiWordAction.java
  * Created on Oct 1, 2004
- * 
+ *
  * Copyright (c)2004 Michael Osterlie
- * 
+ *
  * This file is part of snippad.
  *
  * snippad is free software; you can redistribute it and/or modify
@@ -34,31 +34,37 @@ import org.outerrim.snippad.ui.swt.WikiViewer;
  * @author darkjedi
  */
 public class DeleteWikiWordAction extends SnipPadBaseAction {
+    /**
+     */
     public DeleteWikiWordAction() {
         setText( "&Delete Word@Ctrl+D" );
         setToolTipText( "Delete the selected wiki word" );
-		setImageDescriptor( ImageUtil.getImageRegistry().getDescriptor( "deleteword" ) );
+        setImageDescriptor(
+                ImageUtil.getImageRegistry().getDescriptor( "deleteword" ) );
     }
 
     /**
      * @see org.eclipse.jface.action.IAction#run()
-     */    
+     */
     public void run() {
         WikiViewer viewer = snippad.getCurrentWikiViewer();
         WikiWord selected = viewer.getSelectedWiki();
         if( selected == null ) {
             return;
         }
-        
-        MessageBox message = new MessageBox( Display.getCurrent().getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO );
-        message.setMessage( "Are you sure you want to delete '" + selected.getName() + "' and all it's children?" );
+
+        MessageBox message = new MessageBox(
+                Display.getCurrent().getActiveShell(),
+                SWT.ICON_QUESTION | SWT.YES | SWT.NO );
+        message.setMessage(
+                "Are you sure you want to delete '" + selected.getName() +
+                "' and all it's children?" );
         int confirm = message.open();
         if( confirm == SWT.NO ) { return; }
-        
+
         WikiWord parent = selected.getParent();
         parent.deleteWikiWord( selected );
         viewer.refreshTree();
         viewer.setModified( true );
     }
-
 }
